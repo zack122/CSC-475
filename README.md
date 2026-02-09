@@ -72,21 +72,21 @@ System performance will be evaluated based on latency, feature stability, and su
 Current research in music-to-light mapping often focuses on low-level features like RMS. Our project seeks to integrate higher-level structural analysis. We are referencing state-of-the-art methods in beat tracking (e.g., Böck et al.) and spectral analysis to ensure the lighting feels "intelligent" rather than random. We are exploring how Chroma features can represent harmonic "warmth" through colour temperature and how onset detection can drive percussive lighting elements.
 
 ## 7. References
-1. 
-2. G. Tzanetakis, *Music Information Retrieval Book – Companion Code Repository*, GitHub repository, https://github.com/gtzan/mir_book, accessed Feb 2026.
-3. MusicInformationRetrieval.com contributors, “Symbolic Representations,” *Music Information Retrieval*, https://musicinformationretrieval.com/content/2_music_representations/symbolic_representations.html, accessed Feb. 2026.
-4. Roland, *VC-1-DMX Video Lighting Converter Product Page*, https://proav.roland.com/global/products/vc-1-dmx, accessed Feb. 2026
-5. MaestroDMX, *MaestroDMX: Intelligent Music-Driven Lighting Controller*, https://maestrodmx.com, accessed Feb. 2026
-6. D. M. McDermott, “Seeing Harmony, Hearing Color,” *Data Science by Design* (blog), https://datasciencebydesign.org/blog/seeing-harmony-hearing-color, accessed Feb 2026.
-7. Ellis, D. P. W. (2007). Beat Tracking by Dynamic Programming. Journal of New Music Research, 36(1), 51–60. https://doi.org/10.1080/09298210701653344
-8. J. P. Bello, L. Daudet, S. Abdallah, C. Duxbury, M. Davies and M. B. Sandler, "A tutorial on onset detection in music signals," in IEEE Transactions on Speech and Audio Processing, vol. 13, no. 5, pp. 1035-1047, Sept. 2005, doi: 10.1109/TSA.2005.851998.
+
+1. G. Tzanetakis, *Music Information Retrieval Book – Companion Code Repository*, GitHub repository, https://github.com/gtzan/mir_book, accessed Feb 2026.
+2. MusicInformationRetrieval.com contributors, “Symbolic Representations,” *Music Information Retrieval*, https://musicinformationretrieval.com/content/2_music_representations/symbolic_representations.html, accessed Feb. 2026.
+3. Roland, *VC-1-DMX Video Lighting Converter Product Page*, https://proav.roland.com/global/products/vc-1-dmx, accessed Feb. 2026
+4. MaestroDMX, *MaestroDMX: Intelligent Music-Driven Lighting Controller*, https://maestrodmx.com, accessed Feb. 2026
+5. D. M. McDermott, “Seeing Harmony, Hearing Color,” *Data Science by Design* (blog), https://datasciencebydesign.org/blog/seeing-harmony-hearing-color, accessed Feb 2026.
+6. Ellis, D. P. W. (2007). Beat Tracking by Dynamic Programming. Journal of New Music Research, 36(1), 51–60. https://doi.org/10.1080/09298210701653344
+7. J. P. Bello, L. Daudet, S. Abdallah, C. Duxbury, M. Davies and M. B. Sandler, "A tutorial on onset detection in music signals," in IEEE Transactions on Speech and Audio Processing, vol. 13, no. 5, pp. 1035-1047, Sept. 2005, doi: 10.1109/TSA.2005.851998.
 keywords: {Tutorial;Multiple signal classification;Signal detection;Signal analysis;Indexing;Time frequency analysis;Envelope detectors;Phase detection;Testing;Guidelines;Attack transcients;audio;note segmentation;novelty detection},
-9. [Reference 7]
-10. [Reference 8]
-11. [Reference 9]
-12. [Reference 10]
-13. [Reference 11]
-14. [Reference 12]
-15. [Reference 13]
-16. [Reference 14]
-17. [Reference 15]
+8. Python Software Foundation. (n.d.). Python documentation – Release 3.14.3. https://docs.python.org/3/ accessed Feb 2026.
+9. McFee, B., Raffel, C., Liang, D., Ellis, D. P., McVicar, M., Battenberg, E., & Nieto, O. (2015). librosa: Audio and music signal analysis in Python (Version 0.11.0). https://librosa.org/doc/latest/ accessed Feb 2026.
+10. Bogdanov, D., Wu, H., Gómez, E., Herrera, P., Mayor, O., Nayak, R., & Serra, X. (2013). Essentia: A C++ library for audio and music analysis. https://essentia.upf.edu/ accessed Feb 2026.
+11. Paszke, A., Gross, S., Massa, F., Lerer, A., Bradbury, J., Chanan, G., … & Chintala, S. (2019). PyTorch: An imperative style, high‑performance deep learning library. https://pytorch.org/docs/stable/ accessed Feb 2026.
+12. Gorski, M., & QLC+ Developers. (n.d.). QLC+ documentation. https://www.qlcplus.org/docs/ accessed Feb 2026.
+13. Wright, M., Freed, A., & Momeni, A. (2002). Open Sound Control 1.0 specification. https://opensoundcontrol.org/specification/ accessed Feb 2026.
+14. Howell, W., & Artistic Licence Holdings Ltd. (2019). Art‑Net 4 specification. https://artisticlicence.com/WebSiteMaster/ProtocolDownloads/art-net.pdf accessed Feb 2026.
+15. Vall, A., Ferraro, E., & Montoliu, R. (2020). Music4All: A large‑scale dataset for music information retrieval. https://sites.google.com/upf.edu/music4all accessed Feb 2026.
+16. Tzanetakis, G., & Cook, P. (2002). Musical genre classification of audio signals. https://urosevic.net/df/gtzan/ accessed Feb 2026.
