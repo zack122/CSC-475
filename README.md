@@ -3,13 +3,14 @@
 ## 1. Project Description
 We propose a music-driven lighting control system that maps audio features extracted from musical recordings to DMX lighting parameters in real-time. The system performs Music Information Retrieval (MIR) to estimate rhythmic and structural cues (e.g., beat/onset strength, energy, spectral brightness, and harmonic descriptors) and translates these cues into stable, musically meaningful lighting changes. 
 
-The goal is to move beyond simple "sound-to-light" triggers and create a system that understands musicality—adjusting intensity, colour, strobe rate, and scene transitions based on the actual characteristics of the audio.
+The goal is to move beyond simple "sound-to-light" triggers and create a system that understands musicality—adjusting intensity, colour, strobe rate, and scene transitions based on the audio's actual characteristics.
 
+System performance will be evaluated based on latency, feature stability, and subjective user feedback on musical coherence and the responsiveness of the lighting output.
 
 
 ## 2. Tools, Datasets, and Literature
 * **Software & Libraries:** Python, `Librosa` (Feature Extraction), `Essentia`, `PyTorch`, `QLC+` (Lighting Control), and `OSC/Art-Net` protocols.
-* **Data Sets:** * **Music4All:** Used for genre and mood-based mapping tests.
+* **Data Sets:** * **Music4All:** Used for offline experiments to test genre- and mood-informed mapping strategies.
     * **GTZAN:** Used for baseline rhythmic and spectral feature validation.
     * **Custom Live Recordings:** For testing real-time latency and onset accuracy.
 * **Literature:** Grounded in MIR research regarding beat tracking, onset detection, and cross-modal mapping (Audio-to-Visual).
@@ -73,17 +74,24 @@ Current research in music-to-light mapping often focuses on low-level features l
 
 ## 7. References
 1. A. Author and B. Author, “The title of the conference paper,” in Proc. of the 18th Int. Society for Music Information Retrieval Conf., Suzhou, China, 2017, pp. 111–117.
-2. [Reference 2]
-3. [Reference 3]
-4. [Reference 4]
-5. [Reference 5]
-6. [Reference 6]
-7. [Reference 7]
-8. [Reference 8]
-9. [Reference 9]
-10. [Reference 10]
-11. [Reference 11]
-12. [Reference 12]
-13. [Reference 13]
-14. [Reference 14]
-15. [Reference 15]
+2. @misc{tzanetakis_mir_book,
+  author = {Tzanetakis, George},
+  title = {mir\_book: Companion Code for Music Information Retrieval},
+  howpublished = {\url{https://github.com/gtzan/mir_book}},
+  year = {2020},
+  note = {Accessed: February 2026}
+}
+
+4. [Reference 3]
+5. [Reference 4]
+6. [Reference 5]
+7. [Reference 6]
+8. [Reference 7]
+9. [Reference 8]
+10. [Reference 9]
+11. [Reference 10]
+12. [Reference 11]
+13. [Reference 12]
+14. [Reference 13]
+15. [Reference 14]
+16. [Reference 15]
