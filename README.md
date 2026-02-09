@@ -15,12 +15,7 @@ System performance will be evaluated based on latency, feature stability, and su
     * **Custom Live Recordings:** For testing real-time latency and onset accuracy.
 * **Literature:** Grounded in MIR research regarding beat tracking, onset detection, and cross-modal mapping (Audio-to-Visual).
 
-## 3. Related Work
-*(This section summarizes the 15-20 references required for the project. A full bibliography is provided at the end of this document.)*
-
-Current research in music-to-light mapping often focuses on low-level features like RMS. Our project seeks to integrate higher-level structural analysis. We are referencing state-of-the-art methods in beat tracking (e.g., Böck et al.) and spectral analysis to ensure the lighting feels "intelligent" rather than random. We are exploring how Chroma features can represent harmonic "warmth" through colour temperature and how onset detection can drive percussive lighting elements.
-
-## 4. Timeline
+## 3. Timeline
 | Date | Milestone |
 | :--- | :--- |
 | **Late Feb** | Design Specification & Literature Review Submission |
@@ -28,7 +23,7 @@ Current research in music-to-light mapping often focuses on low-level features l
 | **Early April** | Final Logic Mapping & System Testing |
 | **Late April** | Final Report Submission (ISMIR LaTeX Format) |
 
-## 5. Team Roles
+## 4. Team Roles
 * **Blake Stewart (Team Lead & Integration):** Overall project oversight, pipeline management from audio input to QLC+ output.
 * **Leo DeRosa (DMX Mapping & Final Editing):** Logic for turning MIR features into lighting commands; final report polishing.
 * **Zachary Zhao (MIR Feature Extraction & Implementation):** Implementation of tempo, beat, and spectral feature extraction.
@@ -36,7 +31,7 @@ Current research in music-to-light mapping often focuses on low-level features l
 
 ---
 
-## 6. Personal Objectives & Performance Indicators
+## 5. Personal Objectives & Performance Indicators
 
 ## Blake Stewart
 ### Objective 1: System Integration and Real-Time Pipeline
@@ -71,6 +66,10 @@ Current research in music-to-light mapping often focuses on low-level features l
 * **PI5 (advanced):** Use Chroma features to map musical keys to specific "mood-based" colour temperatures.
 
 ---
+## 6. Related Work
+*(This section summarizes the 15-20 references required for the project. A full bibliography is provided at the end of this document.)*
+
+Current research in music-to-light mapping often focuses on low-level features like RMS. Our project seeks to integrate higher-level structural analysis. We are referencing state-of-the-art methods in beat tracking (e.g., Böck et al.) and spectral analysis to ensure the lighting feels "intelligent" rather than random. We are exploring how Chroma features can represent harmonic "warmth" through colour temperature and how onset detection can drive percussive lighting elements.
 
 ## 7. References
 1. 
