@@ -74,13 +74,7 @@ Current research in music-to-light mapping often focuses on low-level features l
 
 ## 7. References
 1. A. Author and B. Author, “The title of the conference paper,” in Proc. of the 18th Int. Society for Music Information Retrieval Conf., Suzhou, China, 2017, pp. 111–117.
-2. @misc{tzanetakis_mir_book,
-  author = {Tzanetakis, George},
-  title = {mir\_book: Companion Code for Music Information Retrieval},
-  howpublished = {\url{https://github.com/gtzan/mir_book}},
-  year = {2020},
-  note = {Accessed: February 2026}
-}
+2. George Tzanetakis. mir_book: Companion Code for Music Information Retrieval. GitHub repository, 2020. Accessed February 2026. https://github.com/gtzan/mir_book
 
 4. [Reference 3]
 5. [Reference 4]
