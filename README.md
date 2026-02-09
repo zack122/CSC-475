@@ -73,19 +73,21 @@ Current research in music-to-light mapping often focuses on low-level features l
 ---
 
 ## 7. References
-1. A. Author and B. Author, “The title of the conference paper,” in Proc. of the 18th Int. Society for Music Information Retrieval Conf., Suzhou, China, 2017, pp. 111–117.
-2. George Tzanetakis. mir_book: Companion Code for Music Information Retrieval. GitHub repository, 2020. Accessed February 2026. https://github.com/gtzan/mir_book
-
-4. [Reference 3]
-5. [Reference 4]
-6. [Reference 5]
-7. [Reference 6]
-8. [Reference 7]
-9. [Reference 8]
-10. [Reference 9]
-11. [Reference 10]
-12. [Reference 11]
-13. [Reference 12]
-14. [Reference 13]
-15. [Reference 14]
-16. [Reference 15]
+1. 
+2. G. Tzanetakis, *Music Information Retrieval Book – Companion Code Repository*, GitHub repository, https://github.com/gtzan/mir_book, accessed Feb 2026.
+3. MusicInformationRetrieval.com contributors, “Symbolic Representations,” *Music Information Retrieval*, https://musicinformationretrieval.com/content/2_music_representations/symbolic_representations.html, accessed Feb. 2026.
+4. Roland, *VC-1-DMX Video Lighting Converter Product Page*, https://proav.roland.com/global/products/vc-1-dmx, accessed Feb. 2026
+5. MaestroDMX, *MaestroDMX: Intelligent Music-Driven Lighting Controller*, https://maestrodmx.com, accessed Feb. 2026
+6. D. M. McDermott, “Seeing Harmony, Hearing Color,” *Data Science by Design* (blog), https://datasciencebydesign.org/blog/seeing-harmony-hearing-color, accessed Feb 2026.
+7. Ellis, D. P. W. (2007). Beat Tracking by Dynamic Programming. Journal of New Music Research, 36(1), 51–60. https://doi.org/10.1080/09298210701653344
+8. J. P. Bello, L. Daudet, S. Abdallah, C. Duxbury, M. Davies and M. B. Sandler, "A tutorial on onset detection in music signals," in IEEE Transactions on Speech and Audio Processing, vol. 13, no. 5, pp. 1035-1047, Sept. 2005, doi: 10.1109/TSA.2005.851998.
+keywords: {Tutorial;Multiple signal classification;Signal detection;Signal analysis;Indexing;Time frequency analysis;Envelope detectors;Phase detection;Testing;Guidelines;Attack transcients;audio;note segmentation;novelty detection},
+9. [Reference 7]
+10. [Reference 8]
+11. [Reference 9]
+12. [Reference 10]
+13. [Reference 11]
+14. [Reference 12]
+15. [Reference 13]
+16. [Reference 14]
+17. [Reference 15]
