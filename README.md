@@ -3,7 +3,7 @@
 ## 1. Project Description
 We propose a music-driven lighting control system that maps audio features extracted from musical recordings to DMX lighting parameters in real-time. The system performs Music Information Retrieval (MIR) to estimate rhythmic and structural cues (e.g., beat/onset strength, energy, spectral brightness, and harmonic descriptors) and translates these cues into stable, musically meaningful lighting changes. 
 
-The goal is to move beyond simple "sound-to-light" triggers and create a system that understands musicality—adjusting intensity, color, strobe rate, and scene transitions based on the actual characteristics of the audio.
+The goal is to move beyond simple "sound-to-light" triggers and create a system that understands musicality—adjusting intensity, colour, strobe rate, and scene transitions based on the actual characteristics of the audio.
 
 
 
@@ -17,7 +17,7 @@ The goal is to move beyond simple "sound-to-light" triggers and create a system 
 ## 3. Related Work
 *(This section summarizes the 15-20 references required for the project. A full bibliography is provided at the end of this document.)*
 
-Current research in music-to-light mapping often focuses on low-level features like RMS. Our project seeks to integrate higher-level structural analysis. We are referencing state-of-the-art methods in beat tracking (e.g., Böck et al.) and spectral analysis to ensure the lighting feels "intelligent" rather than random. We are exploring how Chroma features can represent harmonic "warmth" through color temperature and how onset detection can drive percussive lighting elements.
+Current research in music-to-light mapping often focuses on low-level features like RMS. Our project seeks to integrate higher-level structural analysis. We are referencing state-of-the-art methods in beat tracking (e.g., Böck et al.) and spectral analysis to ensure the lighting feels "intelligent" rather than random. We are exploring how Chroma features can represent harmonic "warmth" through colour temperature and how onset detection can drive percussive lighting elements.
 
 ## 4. Timeline
 | Date | Milestone |
@@ -49,7 +49,7 @@ Current research in music-to-light mapping often focuses on low-level features l
 ### Objective 1: DMX Mapping Logic and Scene Management
 * **PI1 (basic):** Establish a functional connection between Python and QLC+ via OSC.
 * **PI2 (basic):** Map audio energy (RMS) to a single DMX dimmer channel.
-* **PI3 (expected):** Create a mapping logic where spectral centroid changes the color palette of the lights.
+* **PI3 (expected):** Create a mapping logic where spectral centroid changes the colour palette of the lights.
 * **PI4 (expected):** Implement a "strobe" trigger based on onset strength or percussive peaks.
 * **PI5 (advanced):** Develop scene transition logic that detects structural changes (verse to chorus) to trigger DMX scene swaps.
 
@@ -66,8 +66,8 @@ Current research in music-to-light mapping often focuses on low-level features l
 * **PI1 (basic):** Calculate Mean Spectral Centroid and Flux for an audio stream.
 * **PI2 (basic):** Implement a "Silence detection" gate to turn off lights when audio stops.
 * **PI3 (expected):** Implement Harmonic/Percussive Source Separation (HPSS) to drive different light groups.
-* **PI4 (expected):** Conduct "User-in-the-loop" testing to calibrate the "aggressiveness" of the lighting behavior.
-* **PI5 (advanced):** Use Chroma features to map musical keys to specific "mood-based" color temperatures.
+* **PI4 (expected):** Conduct "User-in-the-loop" testing to calibrate the "aggressiveness" of the lighting behaviour.
+* **PI5 (advanced):** Use Chroma features to map musical keys to specific "mood-based" colour temperatures.
 
 ---
 
