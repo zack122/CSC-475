@@ -80,7 +80,6 @@ Current research in music-to-light mapping often focuses on low-level features l
 5. D. M. McDermott, “Seeing Harmony, Hearing Color,” *Data Science by Design* (blog), https://datasciencebydesign.org/blog/seeing-harmony-hearing-color, accessed Feb 2026.
 6. Ellis, D. P. W. (2007). Beat Tracking by Dynamic Programming. Journal of New Music Research, 36(1), 51–60. https://doi.org/10.1080/09298210701653344
 7. J. P. Bello, L. Daudet, S. Abdallah, C. Duxbury, M. Davies and M. B. Sandler, "A tutorial on onset detection in music signals," in IEEE Transactions on Speech and Audio Processing, vol. 13, no. 5, pp. 1035-1047, Sept. 2005, doi: 10.1109/TSA.2005.851998.
-keywords: {Tutorial;Multiple signal classification;Signal detection;Signal analysis;Indexing;Time frequency analysis;Envelope detectors;Phase detection;Testing;Guidelines;Attack transcients;audio;note segmentation;novelty detection},
 8. Python Software Foundation. (n.d.). Python documentation – Release 3.14.3. https://docs.python.org/3/ accessed Feb 2026.
 9. McFee, B., Raffel, C., Liang, D., Ellis, D. P., McVicar, M., Battenberg, E., & Nieto, O. (2015). librosa: Audio and music signal analysis in Python (Version 0.11.0). https://librosa.org/doc/latest/ accessed Feb 2026.
 10. Bogdanov, D., Wu, H., Gómez, E., Herrera, P., Mayor, O., Nayak, R., & Serra, X. (2013). Essentia: A C++ library for audio and music analysis. https://essentia.upf.edu/ accessed Feb 2026.
