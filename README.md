@@ -34,7 +34,7 @@ System performance will be evaluated based on latency, feature stability, and su
 ## 5. Personal Objectives & Performance Indicators
 
 ## Blake Stewart
-### Objective 1: System Integration and Real-Time Pipeline
+### Objective 1: System Integration and Real-Time Pipeline.
 * **PI1 (basic):** Set up the project repository and basic environment requirements.
 * **PI2 (basic):** Ensure audio can be streamed into the system via file buffer or live input.
 * **PI3 (expected):** Integrate all MIR scripts from team members into a single, unified control loop.
