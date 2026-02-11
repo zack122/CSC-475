@@ -18,7 +18,7 @@ System performance will be evaluated based on latency, feature stability, and su
 ## 3. Timeline
 | Date | Milestone |
 | :--- | :--- |
-| **Late Feb** | Design Specification & Literature Review Submission |
+| **Early Feb** | Design Specification & Literature Review Submission |
 | **Mid March** | Initial Feature Extraction Pipeline & DMX Linkage |
 | **Early April** | Final Logic Mapping & System Testing |
 | **Late April** | Final Report Submission (ISMIR LaTeX Format) |
