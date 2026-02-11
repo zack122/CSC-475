@@ -24,16 +24,16 @@ System performance will be evaluated based on latency, feature stability, and su
 | **Late April** | Final Report Submission (ISMIR LaTeX Format) |
 
 ## 4. Team Roles
-* **Blake Stewart (Team Lead & Integration):** Overall project oversight, pipeline management from audio input to QLC+ output.
+* **Zachary Zhao (Team Lead & Integration):** Overall project oversight, pipeline management from audio input to QLC+ output.
 * **Leo DeRosa (DMX Mapping & Final Editing):** Logic for turning MIR features into lighting commands; final report polishing.
-* **Zachary Zhao (MIR Feature Extraction & Implementation):** Implementation of tempo, beat, and spectral feature extraction.
+* **Blake Stewart (MIR Feature Extraction & Implementation):** Implementation of tempo, beat, and spectral feature extraction.
 * **Tom Yasinchuk (MIR Feature Extraction & Testing):** MIR component implementation and end-to-end system testing.
 
 ---
 
 ## 5. Personal Objectives & Performance Indicators
 
-## Blake Stewart
+## Zachary Zhao
 ### Objective 1: System Integration and Real-Time Pipeline.
 * **PI1 (basic):** Set up the project repository and basic environment requirements.
 * **PI2 (basic):** Ensure audio can be streamed into the system via file buffer or live input.
@@ -49,7 +49,7 @@ System performance will be evaluated based on latency, feature stability, and su
 * **PI4 (expected):** Implement a "strobe" trigger based on onset strength or percussive peaks.
 * **PI5 (advanced):** Develop scene transition logic that detects structural changes (verse to chorus) to trigger DMX scene swaps.
 
-## Zachary Zhao
+## Blake Stewart
 ### Objective 1: Rhythmic Feature Extraction
 * **PI1 (basic):** Implement basic tempo (BPM) estimation using Librosa.
 * **PI2 (basic):** Extract rhythmic onsets from various music genres.
