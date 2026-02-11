@@ -3,9 +3,9 @@
 ## 1. Project Description
 We propose a music-driven lighting control system that maps audio features extracted from musical recordings to DMX lighting parameters in real-time. The system performs Music Information Retrieval (MIR) to estimate rhythmic and structural cues (e.g., beat/onset strength, energy, spectral brightness, and harmonic descriptors) and translates these cues into stable, musically meaningful lighting changes. 
 
-The goal is to move beyond simple "sound-to-light" triggers and create a system that understands musicality—adjusting intensity, colour, strobe rate, and scene transitions based on the audio's actual characteristics.
+The goal is to move beyond simple "sound-to-light" triggers and create a system that understands musicality, adjusting intensity, colour, strobe rate, and scene transitions based on the audio's actual characteristics.
 
-System performance will be evaluated based on latency, feature stability, and subjective user feedback on musical coherence and the responsiveness of the lighting output.
+System performance will be evaluated based on latency, feature stability, and subjective user feedback on musical coherence and the responsiveness of the lighting output. 
 
 
 ## 2. Tools, Datasets, and Literature
@@ -13,7 +13,8 @@ System performance will be evaluated based on latency, feature stability, and su
 * **Data Sets:** * **Music4All:** Used for offline experiments to test genre- and mood-informed mapping strategies.
     * **GTZAN:** Used for baseline rhythmic and spectral feature validation.
     * **Custom Live Recordings:** For testing real-time latency and onset accuracy.
-* **Literature:** Grounded in MIR research regarding beat tracking, onset detection, and cross-modal mapping (Audio-to-Visual).
+* **Literature:** Grounded in MIR research regarding beat tracking, onset detection, and cross-modal mapping (Audio-to-Visual). [<sub>7</sub>]
+
 
 ## 3. Timeline
 | Date | Milestone |
