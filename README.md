@@ -70,7 +70,9 @@ System performance will be evaluated based on latency, feature stability, and su
 ## 6. Related Work
 *(This section summarizes the 15-20 references required for the project. A full bibliography is provided at the end of this document.)*
 
-Current research in music-to-light mapping often focuses on low-level features like RMS. Our project seeks to integrate higher-level structural analysis. We are referencing state-of-the-art methods in beat tracking (e.g., Böck et al.) and spectral analysis to ensure the lighting feels "intelligent" rather than random. We are exploring how Chroma features can represent harmonic "warmth" through colour temperature and how onset detection can drive percussive lighting elements.
+Current research in music-to-light mapping frequently relies on low-level signal features such as RMS (Root Mean Square) for volume-based triggers. Our project aims to advance this by integrating higher-level structural and rhythmic analysis.
+
+We utilize foundational methods in beat tracking, specifically the dynamic programming approach pioneered by Ellis (2007), and onset detection techniques detailed by Bello et al. (2005) to ensure lighting transitions are synchronized with musical events rather than just volume peaks. By leveraging the Librosa (McFee et al.) and Essentia (Bogdanov et al.) libraries, we extract sophisticated features like Spectral Centroid and Chroma. These allow us to map harmonic "warmth" to color temperature and use spectral flux to drive percussive lighting elements. This multi-layered approach ensures the lighting output is "intelligent," reflecting the actual musicality and structure of the audio stream.
 
 ## 7. References
 
