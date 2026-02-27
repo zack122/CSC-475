@@ -1,0 +1,37 @@
+audio:
+  sample_rate: 22050
+  frame_length: 2048
+  hop_length: 512
+
+mir:
+  smoothing:
+    ema_alpha: 0.3
+    median_window: 5
+  silence_threshold_db: -40
+  onset_threshold: 0.6
+
+mapping:
+  profile: "concert"
+  dimmer_curve: "gamma"        # linear | gamma | sigmoid
+  dimmer_gamma: 2.2
+  color_palette: "warm_cool"   # warm_cool | rainbow | monochrome
+  strobe_onset_threshold: 0.8
+  strobe_decay_ms: 100
+
+scenes:
+  transition_duration_ms: 500
+  default_scene: "ambient"
+
+osc:
+  host: "127.0.0.1"
+  port: 7700
+  address_map:
+    dimmer: "/qlcplus/widget/1"
+    red: "/qlcplus/widget/2"
+    green: "/qlcplus/widget/3"
+    blue: "/qlcplus/widget/4"
+    strobe: "/qlcplus/widget/5"
+
+dashboard:
+  port: 8080
+  push_rate_hz: 30

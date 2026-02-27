@@ -1,0 +1,12 @@
+librosa
+essentia
+numpy
+scipy
+python-osc
+fastapi
+uvicorn
+websockets
+pydantic
+pyyaml
+soundfile
+pytest
