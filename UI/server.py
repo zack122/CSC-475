@@ -181,8 +181,11 @@ def process_and_play(filepath):
             else:
                 time.sleep(0.001)
 
-        # Cleanup
-        qlc.blackout(4)
+        # Turn lights off after playback ends
+        time.sleep(0.1) 
+        qlc.blackout(4) # Wasn't working when I send it once, but adding a delay and a second send fixed it
+        time.sleep(0.05)
+        qlc.blackout(4) 
 
         update_status(
             'idle',
