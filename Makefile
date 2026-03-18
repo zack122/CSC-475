@@ -10,7 +10,7 @@ endif
 
 setup:
 	python -m venv venv
-	"$(PIP)" install --upgrade pip
+	"$(PYTHON)" -m pip install --upgrade pip
 	"$(PIP)" install -r requirements.txt
 
 run:
