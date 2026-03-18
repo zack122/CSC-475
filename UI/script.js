@@ -37,13 +37,30 @@ dropZone.addEventListener('drop', (e) => {
     }
 });
 
+// Audio playback element
+let audioPlayer = null;
+let audioBlobUrl = null;
+
 // Upload file to server
 function uploadFile(file) {
     const formData = new FormData();
     formData.append('file', file);
-    
+
     statusMessage.textContent = 'Uploading file...';
-    
+
+    // Prepare audio for playback using the local file (no server round-trip needed)
+    if (audioBlobUrl) {
+        URL.revokeObjectURL(audioBlobUrl);
+    }
+    audioBlobUrl = URL.createObjectURL(file);
+
+    // Pre-create the audio element during user gesture so autoplay is allowed
+    if (audioPlayer) {
+        audioPlayer.pause();
+    }
+    audioPlayer = new Audio(audioBlobUrl);
+    audioPlayer.preload = 'auto';
+
     fetch('http://localhost:5000/upload', {
         method: 'POST',
         body: formData
@@ -58,6 +75,18 @@ function uploadFile(file) {
     });
 }
 
+// Start audio playback when server signals
+socket.on('start_playback', () => {
+    console.log('Starting audio playback');
+    if (audioPlayer) {
+        audioPlayer.currentTime = 0;
+        audioPlayer.play().catch(err => {
+            console.error('Audio playback failed:', err);
+            statusMessage.textContent += ' (Audio playback blocked — click the page first)';
+        });
+    }
+});
+
 // WebSocket: Receive status updates
 socket.on('status_update', (status) => {
     console.log('Status update:', status);
@@ -69,6 +98,12 @@ socket.on('status_update', (status) => {
     progressFill.style.width = status.progress + '%';
     progressText.textContent = status.progress + '%';
     
+    // Stop audio when playback ends or errors
+    if ((status.state === 'idle' || status.state === 'error') && audioPlayer) {
+        audioPlayer.pause();
+        audioPlayer = null;
+    }
+
     // Update status panel color based on state
     statusPanel.className = 'panel status-' + status.state;
     

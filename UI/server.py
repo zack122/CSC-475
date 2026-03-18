@@ -112,6 +112,10 @@ def process_and_play(filepath):
             update_status('error', f'Could not connect to QLC+: {str(e)}', 0)
             return
 
+        # Play the audio file
+        audio_filename = os.path.basename(filepath)
+        socketio.emit('start_playback', {'filename': audio_filename})
+
         start_time = time.time()
         frame_index = 0
         last_ui_emit = 0.0
@@ -200,6 +204,10 @@ def styles():
 def script():
     """Serve JavaScript file"""
     return send_from_directory('.', 'script.js')
+
+@app.route('/uploads/<path:filename>')
+def serve_upload(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
