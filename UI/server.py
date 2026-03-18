@@ -266,6 +266,12 @@ def handle_toggle_pause():
     if playback_paused.is_set():
         playback_paused.clear()
         print('[PLAYBACK] Paused')
+        # Turn lights off while paused
+        try:
+            qlc = QLCController(ip="127.0.0.1", port=7700)
+            qlc.blackout(4)
+        except Exception:
+            pass
         socketio.emit('playback_paused', {'paused': True})
     else:
         playback_paused.set()
