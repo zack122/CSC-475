@@ -1,6 +1,7 @@
 # Quick Start
 To run the program do the following:
 ## Setup 
+(If you don't have make you may need to run: choco install make)
 1. Run in powershell:
 make setup
 make ui

@@ -24,6 +24,10 @@ ALLOWED_EXTENSIONS = {'wav', 'mp3', 'flac', 'ogg', 'm4a'}
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# Playback control
+playback_paused = threading.Event()
+playback_paused.set()  # set = running, clear = paused
+
 # Global state
 current_status = {
     'state': 'idle',  # idle, processing, playing, error
@@ -114,17 +118,25 @@ def process_and_play(filepath):
 
         # Play the audio file
         audio_filename = os.path.basename(filepath)
+        playback_paused.set()  # ensure not paused from a previous run
         socketio.emit('start_playback', {'filename': audio_filename})
 
         start_time = time.time()
         frame_index = 0
         last_ui_emit = 0.0
+        paused_offset = 0.0  # total time spent paused
 
         print(f"[PLAYBACK] Total frames: {len(lighting_frames)}")
         print(f"[PLAYBACK] Duration: {duration:.2f}s")
 
         while frame_index < len(lighting_frames):
-            elapsed = time.time() - start_time
+            # If paused, block here and track how long we were paused
+            if not playback_paused.is_set():
+                pause_start = time.time()
+                playback_paused.wait()  # blocks until resumed
+                paused_offset += time.time() - pause_start
+
+            elapsed = time.time() - start_time - paused_offset
             frame = lighting_frames[frame_index]
             frame_time = float(frame['time'])
 
@@ -244,6 +256,18 @@ def handle_connect():
     """Handle client connection"""
     emit('status_update', current_status)
     print('Client connected')
+
+@socketio.on('toggle_pause')
+def handle_toggle_pause():
+    """Toggle pause/resume for playback"""
+    if playback_paused.is_set():
+        playback_paused.clear()
+        print('[PLAYBACK] Paused')
+        socketio.emit('playback_paused', {'paused': True})
+    else:
+        playback_paused.set()
+        print('[PLAYBACK] Resumed')
+        socketio.emit('playback_paused', {'paused': False})
 
 @socketio.on('disconnect')
 def handle_disconnect():

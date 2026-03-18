@@ -10,6 +10,24 @@ const progressText = document.getElementById('progress-text');
 const infoPanel = document.getElementById('info-panel');
 const statusPanel = document.getElementById('status-panel');
 
+const pauseBtn = document.getElementById('pause-btn');
+
+// Pause button handler
+pauseBtn.addEventListener('click', () => {
+    socket.emit('toggle_pause');
+});
+
+// Server confirms pause/resume — update audio and button text
+socket.on('playback_paused', (data) => {
+    if (data.paused) {
+        pauseBtn.textContent = 'Resume';
+        if (audioPlayer) audioPlayer.pause();
+    } else {
+        pauseBtn.textContent = 'Pause';
+        if (audioPlayer) audioPlayer.play();
+    }
+});
+
 // File upload handlers
 dropZone.addEventListener('click', () => fileInput.click());
 
@@ -102,6 +120,14 @@ socket.on('status_update', (status) => {
     if ((status.state === 'idle' || status.state === 'error') && audioPlayer) {
         audioPlayer.pause();
         audioPlayer = null;
+    }
+
+    // Show/hide pause button
+    if (status.state === 'playing') {
+        pauseBtn.style.display = 'block';
+    } else {
+        pauseBtn.style.display = 'none';
+        pauseBtn.textContent = 'Pause';
     }
 
     // Update status panel color based on state
