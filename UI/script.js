@@ -1,12 +1,22 @@
-// Basic JS for drag-and-drop of MP3
+// Connect to WebSocket
+const socket = io('http://localhost:5000');
 
+// DOM elements
 const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-input');
+const statusMessage = document.getElementById('status-message');
+const progressFill = document.getElementById('progress-fill');
+const progressText = document.getElementById('progress-text');
+const infoPanel = document.getElementById('info-panel');
+const statusPanel = document.getElementById('status-panel');
 
+// File upload handlers
 dropZone.addEventListener('click', () => fileInput.click());
 
 fileInput.addEventListener('change', () => {
-    handleFiles(fileInput.files);
+    if (fileInput.files.length > 0) {
+        uploadFile(fileInput.files[0]);
+    }
 });
 
 dropZone.addEventListener('dragover', (e) => {
@@ -21,17 +31,104 @@ dropZone.addEventListener('dragleave', () => {
 dropZone.addEventListener('drop', (e) => {
     e.preventDefault();
     dropZone.classList.remove('hover');
-    const files = e.dataTransfer.files;
-    handleFiles(files);
+    
+    if (e.dataTransfer.files.length > 0) {
+        uploadFile(e.dataTransfer.files[0]);
+    }
 });
 
-function handleFiles(files) {
-    if (files.length === 0) return;
-    const file = files[0];
-    if (file.type !== 'audio/mpeg') {
-        alert('Please drop an MP3 file.');
-        return;
-    }
-    console.log('File received:', file.name);
-    // further processing here
+// Upload file to server
+function uploadFile(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    statusMessage.textContent = 'Uploading file...';
+    
+    fetch('http://localhost:5000/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Upload successful:', data);
+    })
+    .catch(error => {
+        statusMessage.textContent = 'Upload failed: ' + error.message;
+        console.error('Upload error:', error);
+    });
 }
+
+// WebSocket: Receive status updates
+socket.on('status_update', (status) => {
+    console.log('Status update:', status);
+    
+    // Update status message
+    statusMessage.textContent = status.message;
+    
+    // Update progress bar
+    progressFill.style.width = status.progress + '%';
+    progressText.textContent = status.progress + '%';
+    
+    // Update status panel color based on state
+    statusPanel.className = 'panel status-' + status.state;
+    
+    // Update audio info
+    if (status.tempo !== null) {
+        document.getElementById('tempo-value').textContent = status.tempo.toFixed(1);
+        document.getElementById('beats-value').textContent = status.beats;
+        document.getElementById('duration-value').textContent = status.duration.toFixed(1);
+        infoPanel.style.display = 'block';
+    }
+    
+    if (status.current_time !== undefined) {
+        document.getElementById('time-value').textContent = status.current_time.toFixed(1);
+    }
+    
+    // Update lighting visualization
+    updateLightingViz(status);
+});
+
+function updateLightingViz(status) {
+    // Update brightness
+    const brightnessBar = document.getElementById('brightness-bar');
+    const brightnessVal = document.getElementById('brightness-val');
+    const brightnessPercent = (status.brightness / 255) * 100;
+    brightnessBar.style.width = brightnessPercent + '%';
+    brightnessVal.textContent = status.brightness;
+    
+    // Update warm
+    const warmBar = document.getElementById('warm-bar');
+    const warmVal = document.getElementById('warm-val');
+    const warmPercent = (status.warm / 255) * 100;
+    warmBar.style.width = warmPercent + '%';
+    warmVal.textContent = status.warm;
+    
+    // Update cool
+    const coolBar = document.getElementById('cool-bar');
+    const coolVal = document.getElementById('cool-val');
+    const coolPercent = (status.cool / 255) * 100;
+    coolBar.style.width = coolPercent + '%';
+    coolVal.textContent = status.cool;
+    
+    // Update strobe
+    const strobeIndicator = document.getElementById('strobe-indicator');
+    const strobeVal = document.getElementById('strobe-val');
+    if (status.strobe) {
+        strobeIndicator.classList.add('active');
+        strobeVal.textContent = 'ON';
+    } else {
+        strobeIndicator.classList.remove('active');
+        strobeVal.textContent = 'OFF';
+    }
+}
+
+// WebSocket connection status
+socket.on('connect', () => {
+    console.log('Connected to server');
+});
+
+socket.on('disconnect', () => {
+    console.log('Disconnected from server');
+    statusMessage.textContent = 'Connection lost. Please refresh.';
+    statusPanel.className = 'panel status-error';
+});
