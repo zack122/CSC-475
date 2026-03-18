@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Workspace>
+<Workspace xmlns="http://www.qlcplus.org/Workspace" CurrentWindow="VirtualConsole">
+ <Creator>
+  <Name>Q Light Controller Plus</Name>
+  <Version>4.14.4</Version>
+  <Author>blake</Author>
+ </Creator>
+ <Engine>
+  <InputOutputMap>
+   <BeatGenerator BeatType="Disabled" BPM="0"/>
+   <NetworkServer Type="Native" AutoStart="False" Name="" Password=""/>
+   <Universe Name="Universe 1" ID="0">
+    <Input Plugin="OSC" UID="127.0.0.1" Line="1"/>
+   </Universe>
+   <Universe Name="Universe 2" ID="1"/>
+   <Universe Name="Universe 3" ID="2"/>
+   <Universe Name="Universe 4" ID="3"/>
+  </InputOutputMap>
+  <Fixture>
+   <Manufacturer>Generic</Manufacturer>
+   <Model>Generic RGBW</Model>
+   <Mode>RGBW</Mode>
+   <ID>0</ID>
+   <Name>Generic RGBW</Name>
+   <Universe>0</Universe>
+   <Address>0</Address>
+   <Channels>4</Channels>
+  </Fixture>
+  <Function ID="0" Type="Scene" Name="Strobe On">
+   <Speed FadeIn="0" FadeOut="0" Duration="0"/>
+   <FixtureVal ID="0">0,255,1,255,2,255,3,255</FixtureVal>
+  </Function>
+  <Function ID="1" Type="Scene" Name="Strobe Off">
+   <Speed FadeIn="0" FadeOut="0" Duration="0"/>
+   <FixtureVal ID="0">0,0,1,0,2,0,3,0</FixtureVal>
+  </Function>
+  <Function ID="2" Type="Chaser" Name="Strobe Toggle">
+   <Speed FadeIn="0" FadeOut="0" Duration="0"/>
+   <Direction>Forward</Direction>
+   <RunOrder>Loop</RunOrder>
+   <SpeedModes FadeIn="Default" FadeOut="Default" Duration="Common"/>
+   <Step Number="0" FadeIn="0" Hold="0" FadeOut="0">0</Step>
+   <Step Number="1" FadeIn="0" Hold="0" FadeOut="0">1</Step>
+  </Function>
+ </Engine>
+ <VirtualConsole>
+  <Frame Caption="">
+   <Appearance>
+    <FrameStyle>None</FrameStyle>
+    <ForegroundColor>Default</ForegroundColor>
+    <BackgroundColor>Default</BackgroundColor>
+    <BackgroundImage>None</BackgroundImage>
+    <Font>Default</Font>
+   </Appearance>
+   <Slider Caption="Intensity" ID="0" WidgetStyle="Slider" InvertedAppearance="false">
+    <WindowState Visible="True" X="100" Y="185" Width="60" Height="200"/>
+    <Appearance>
+     <FrameStyle>Sunken</FrameStyle>
+     <ForegroundColor>Default</ForegroundColor>
+     <BackgroundColor>Default</BackgroundColor>
+     <BackgroundImage>None</BackgroundImage>
+     <Font>Default</Font>
+    </Appearance>
+    <Input Universe="0" Channel="64903"/>
+    <SliderMode ValueDisplayStyle="Exact" ClickAndGoType="None" Monitor="false">Level</SliderMode>
+    <Level LowLimit="0" HighLimit="255" Value="81">
+     <Channel Fixture="0">0</Channel>
+    </Level>
+    <Playback>
+     <Function>4294967295</Function>
+    </Playback>
+   </Slider>
+   <Slider Caption="Warm" ID="1" WidgetStyle="Slider" InvertedAppearance="false">
+    <WindowState Visible="True" X="175" Y="185" Width="60" Height="200"/>
+    <Appearance>
+     <FrameStyle>Sunken</FrameStyle>
+     <ForegroundColor>Default</ForegroundColor>
+     <BackgroundColor>Default</BackgroundColor>
+     <BackgroundImage>None</BackgroundImage>
+     <Font>Default</Font>
+    </Appearance>
+    <Input Universe="0" Channel="45774"/>
+    <SliderMode ValueDisplayStyle="Exact" ClickAndGoType="None" Monitor="false">Level</SliderMode>
+    <Level LowLimit="0" HighLimit="255" Value="177">
+     <Channel Fixture="0">1</Channel>
+    </Level>
+    <Playback>
+     <Function>4294967295</Function>
+    </Playback>
+   </Slider>
+   <Slider Caption="Cool" ID="2" WidgetStyle="Slider" InvertedAppearance="false">
+    <WindowState Visible="True" X="245" Y="190" Width="60" Height="200"/>
+    <Appearance>
+     <FrameStyle>Sunken</FrameStyle>
+     <ForegroundColor>Default</ForegroundColor>
+     <BackgroundColor>Default</BackgroundColor>
+     <BackgroundImage>None</BackgroundImage>
+     <Font>Default</Font>
+    </Appearance>
+    <Input Universe="0" Channel="10232"/>
+    <SliderMode ValueDisplayStyle="Exact" ClickAndGoType="None" Monitor="false">Level</SliderMode>
+    <Level LowLimit="0" HighLimit="255" Value="77">
+     <Channel Fixture="0">2</Channel>
+    </Level>
+    <Playback>
+     <Function>4294967295</Function>
+    </Playback>
+   </Slider>
+   <Button Caption="Strobe" ID="3" Icon="">
+    <WindowState Visible="True" X="335" Y="315" Width="50" Height="50"/>
+    <Appearance>
+     <FrameStyle>None</FrameStyle>
+     <ForegroundColor>Default</ForegroundColor>
+     <BackgroundColor>Default</BackgroundColor>
+     <BackgroundImage>None</BackgroundImage>
+     <Font>Default</Font>
+    </Appearance>
+    <Function ID="2"/>
+    <Action>Toggle</Action>
+    <Intensity Adjust="False">100</Intensity>
+    <Input Universe="0" Channel="39978"/>
+   </Button>
+  </Frame>
+  <Properties>
+   <Size Width="1920" Height="1080"/>
+   <GrandMaster Visible="1" ChannelMode="Intensity" ValueMode="Reduce" SliderMode="Normal"/>
+  </Properties>
+ </VirtualConsole>
+ <SimpleDesk>
+  <Engine/>
+ </SimpleDesk>
+</Workspace>

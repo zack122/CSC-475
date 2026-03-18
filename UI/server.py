@@ -44,84 +44,147 @@ def allowed_file(filename):
 
 def update_status(state, message, progress=None, **kwargs):
     """Update status and broadcast to all connected clients"""
+
+    def clean_value(v):
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, int):
+            return v
+        if isinstance(v, float):
+            return v
+        try:
+            # handle numpy scalar types
+            if hasattr(v, "item"):
+                return v.item()
+        except Exception:
+            pass
+        return v
+
     current_status['state'] = state
     current_status['message'] = message
+
     if progress is not None:
-        current_status['progress'] = progress
-    current_status.update(kwargs)
+        current_status['progress'] = int(progress)
+
+    for key, value in kwargs.items():
+        current_status[key] = clean_value(value)
+
     socketio.emit('status_update', current_status)
 
 def process_and_play(filepath):
-    """Process audio file and send DMX commands"""
+    """Process audio file and send OSC commands to QLC+"""
     try:
         # Step 1: Load audio
         update_status('processing', 'Loading audio file...', 10)
         y, sr = load_audio(filepath)
-        duration = len(y) / sr
-        
+        duration = float(len(y) / sr)
+
         # Step 2: Extract features
         update_status('processing', 'Extracting MIR features...', 30)
         features = extract_features(y, sr)
-        
+
         # Step 3: Map to lighting
         update_status('processing', 'Mapping to lighting...', 50)
         lighting_frames = map_features_to_lighting(features)
-        
+
+        if not lighting_frames:
+            update_status('error', 'No lighting frames were generated.', 0)
+            return
+
         # Update with extracted info
-        update_status('processing', 'Ready to send DMX commands', 70,
-                     tempo=float(features['tempo']),
-                     beats=len(features['beat_frames']),
-                     duration=duration)
-        
-        time.sleep(1)  # Brief pause
-        
-        # Step 4: Initialize QLC+ and send commands
-        update_status('playing', 'Sending DMX commands to QLC+...', 80)
-        
+        update_status(
+            'processing',
+            'Ready to send OSC commands',
+            70,
+            tempo=float(features['tempo']),
+            beats=int(len(features['beat_frames'])),
+            duration=duration
+        )
+
+        time.sleep(1)
+
+        # Step 4: Initialize QLC+
+        update_status('playing', 'Sending OSC commands to QLC+...', 80)
+
         try:
             qlc = QLCController(ip="127.0.0.1", port=7700)
         except Exception as e:
             update_status('error', f'Could not connect to QLC+: {str(e)}', 0)
             return
-        
-        # Send lighting commands in real-time
+
         start_time = time.time()
         frame_index = 0
-        
+        last_ui_emit = 0.0
+
+        print(f"[PLAYBACK] Total frames: {len(lighting_frames)}")
+        print(f"[PLAYBACK] Duration: {duration:.2f}s")
+
         while frame_index < len(lighting_frames):
             elapsed = time.time() - start_time
             frame = lighting_frames[frame_index]
-            
-            if elapsed >= frame['time']:
-                # Send DMX commands
-                qlc.set_channel(1, frame['brightness'])
-                qlc.set_channel(2, frame['warm'])
-                qlc.set_channel(3, frame['cool'])
-                qlc.set_channel(4, 255 if frame['strobe'] else 0)
-                
-                # Update progress and lighting values
-                progress = 80 + int((elapsed / duration) * 20)
-                update_status('playing', f'Playing... {elapsed:.1f}s / {duration:.1f}s',
-                            progress, 
-                            current_time=elapsed,
-                            brightness=frame['brightness'],
-                            warm=frame['warm'],
-                            cool=frame['cool'],
-                            strobe=frame['strobe'])
-                
+            frame_time = float(frame['time'])
+
+            if elapsed >= frame_time:
+                brightness = int(frame['brightness'])
+                warm = int(frame['warm'])
+                cool = int(frame['cool'])
+                strobe = bool(frame['strobe'])
+
+                # Send OSC commands
+                qlc.set_channel(1, brightness)
+                qlc.set_channel(2, warm)
+                qlc.set_channel(3, cool)
+                qlc.set_channel(4, 255 if strobe else 0)
+
+                # Only emit UI updates every ~50ms to avoid spamming the browser
+                if elapsed - last_ui_emit >= 0.05 or frame_index == len(lighting_frames) - 1:
+                    progress = min(99, 80 + int((frame_time / max(duration, 0.001)) * 20))
+
+                    update_status(
+                        'playing',
+                        f'Playing... {frame_time:.1f}s / {duration:.1f}s',
+                        progress,
+                        current_time=frame_time,
+                        brightness=brightness,
+                        warm=warm,
+                        cool=cool,
+                        strobe=strobe
+                    )
+
+                    last_ui_emit = elapsed
+
+                # Debug print every 20 frames
+                if frame_index % 20 == 0:
+                    print(
+                        f"[FRAME {frame_index}] "
+                        f"t={frame_time:.2f}s "
+                        f"brightness={brightness} warm={warm} cool={cool} strobe={strobe}"
+                    )
+
                 frame_index += 1
             else:
                 time.sleep(0.001)
-        
+
         # Cleanup
         qlc.blackout(4)
-        update_status('idle', 'Playback complete!', 100,
-                     brightness=0, warm=0, cool=0, strobe=False)
-        
+
+        update_status(
+            'idle',
+            'Playback complete!',
+            100,
+            current_time=duration,
+            brightness=0,
+            warm=0,
+            cool=0,
+            strobe=False
+        )
+
+        print("[PLAYBACK] Complete")
+
     except Exception as e:
-        update_status('error', f'Error: {str(e)}', 0)
         import traceback
         traceback.print_exc()
+        update_status('error', f'Error: {str(e)}', 0)
 
 @app.route('/')
 def index():
