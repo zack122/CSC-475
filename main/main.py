@@ -4,7 +4,7 @@ import sys
 # allow imports from sibling folders
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from MIR.features import load_audio, extract_features
+from mir.features import load_audio, extract_features
 from lighting.controller import map_features_to_lighting, print_preview
 
 
