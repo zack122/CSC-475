@@ -2,3 +2,8 @@ librosa
 numpy
 soundfile
 audioread
+python-osc
+flask
+flask-cors
+flask-socketio
+sounddevice

@@ -2,15 +2,94 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSC 412</title>
+    <title>Music to DMX Lighting Controller</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1 id="heading">Music to DMX Lighting Analyser</h1>
-    <div id="drop-zone">Drop MP3 file here or click to select</div>
-    <input type="file" id="file-input" accept="audio/mp3" style="display:none;">
+    <div class="container">
+        <h1>🎵 Music to DMX Lighting Controller</h1>
+        
+        <!-- Status Display -->
+        <div id="status-panel" class="panel">
+            <h2>Status</h2>
+            <div id="status-message">Ready to upload audio file</div>
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+            <div id="progress-text">0%</div>
+        </div>
+        
+        <!-- File Upload -->
+        <div id="upload-panel" class="panel">
+            <h2>Upload Audio File</h2>
+            <div id="drop-zone" class="drop-zone">
+                <p>Drop audio file here or click to select</p>
+                <p class="file-types">Supported: .mp3, .wav, .flac, .ogg, .m4a</p>
+            </div>
+            <input type="file" id="file-input" accept="audio/*" style="display:none;">
+        </div>
+        
+        <!-- Audio Info -->
+        <div id="info-panel" class="panel" style="display:none;">
+            <h2>Audio Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Tempo:</span>
+                    <span id="tempo-value">--</span> BPM
+                </div>
+                <div class="info-item">
+                    <span class="label">Beats:</span>
+                    <span id="beats-value">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Duration:</span>
+                    <span id="duration-value">--</span>s
+                </div>
+                <div class="info-item">
+                    <span class="label">Current Time:</span>
+                    <span id="time-value">0.0</span>s
+                </div>
+            </div>
+        </div>
+        
+        <!-- Lighting Visualization -->
+        <div id="lighting-panel" class="panel">
+            <h2>DMX Channel Values (Live)</h2>
+            <div class="lighting-viz">
+                <div class="channel">
+                    <label>Ch1: Brightness</label>
+                    <div class="channel-bar-container">
+                        <div class="channel-bar" id="brightness-bar"></div>
+                    </div>
+                    <span id="brightness-val">0</span>
+                </div>
+                <div class="channel">
+                    <label>Ch2: Warm</label>
+                    <div class="channel-bar-container">
+                        <div class="channel-bar warm" id="warm-bar"></div>
+                    </div>
+                    <span id="warm-val">0</span>
+                </div>
+                <div class="channel">
+                    <label>Ch3: Cool</label>
+                    <div class="channel-bar-container">
+                        <div class="channel-bar cool" id="cool-bar"></div>
+                    </div>
+                    <span id="cool-val">0</span>
+                </div>
+                <div class="channel">
+                    <label>Ch4: Strobe</label>
+                    <div class="channel-bar-container">
+                        <div class="strobe-indicator" id="strobe-indicator"></div>
+                    </div>
+                    <span id="strobe-val">OFF</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
