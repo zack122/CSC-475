@@ -118,7 +118,7 @@ def process_and_play(filepath):
 
         # Play the audio file
         audio_filename = os.path.basename(filepath)
-        playback_paused.set()  # ensure not paused from a previous run
+        playback_paused.set()
         socketio.emit('start_playback', {'filename': audio_filename})
 
         start_time = time.time()

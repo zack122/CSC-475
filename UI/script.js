@@ -12,12 +12,10 @@ const statusPanel = document.getElementById('status-panel');
 
 const pauseBtn = document.getElementById('pause-btn');
 
-// Pause button handler
+// Pause button
 pauseBtn.addEventListener('click', () => {
     socket.emit('toggle_pause');
 });
-
-// Server confirms pause/resume — update audio and button text
 socket.on('playback_paused', (data) => {
     if (data.paused) {
         pauseBtn.textContent = 'Resume';
