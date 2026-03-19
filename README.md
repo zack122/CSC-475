@@ -1,5 +1,18 @@
 # Project Design Specification: Music-Driven DMX Lighting Control System
 
+## Quick Start (Bash/zsh)
+
+- Setup:
+  - cd to the repo root
+  - python3 -m venv venv && source venv/bin/activate
+  - pip install --upgrade pip && pip install -r requirements.txt && pip install eventlet
+- Run:
+  - python UI/server.py
+  - Open the URL shown in the terminal
+- Notes:
+  - Uses same-origin endpoints, so the UI automatically matches whatever host/port you start the server on.
+  - Optional (QLC+): open your show file and enable OSC input on port 7700.
+
 ## 1. Project Description
 We propose a music-driven lighting control system that maps audio features extracted from musical recordings to DMX lighting parameters in real-time. The system performs Music Information Retrieval (MIR) to estimate rhythmic and structural cues (e.g., beat/onset strength, energy, spectral brightness, and harmonic descriptors) and translates these cues into stable, musically meaningful lighting changes. 
 
