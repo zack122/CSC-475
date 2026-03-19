@@ -1,5 +1,5 @@
-// Connect to WebSocket
-const socket = io('http://localhost:5000');
+// Connect to WebSocket (same-origin)
+const socket = io();
 
 // DOM elements
 const dropZone = document.getElementById('drop-zone');
@@ -77,7 +77,7 @@ function uploadFile(file) {
     audioPlayer = new Audio(audioBlobUrl);
     audioPlayer.preload = 'auto';
 
-    fetch('http://localhost:5000/upload', {
+    fetch('/upload', {
         method: 'POST',
         body: formData
     })
@@ -138,9 +138,24 @@ socket.on('status_update', (status) => {
         document.getElementById('duration-value').textContent = status.duration.toFixed(1);
         infoPanel.style.display = 'block';
     }
+    if (status.mean_spectral_centroid !== undefined) {
+        const v = Number(status.mean_spectral_centroid);
+        if (!Number.isNaN(v)) {
+            document.getElementById('centroid-value').textContent = v.toFixed(1);
+        }
+    }
+    if (status.mean_spectral_flux !== undefined) {
+        const v = Number(status.mean_spectral_flux);
+        if (!Number.isNaN(v)) {
+            document.getElementById('flux-value').textContent = v.toFixed(3);
+        }
+    }
     
     if (status.current_time !== undefined) {
         document.getElementById('time-value').textContent = status.current_time.toFixed(1);
+    }
+    if (typeof status.silent === 'boolean') {
+        document.getElementById('silence-value').textContent = status.silent ? 'ON' : 'OFF';
     }
     
     // Update lighting visualization

@@ -102,7 +102,10 @@ def process_and_play(filepath):
             70,
             tempo=float(features['tempo']),
             beats=int(len(features['beat_frames'])),
-            duration=duration
+            duration=duration,
+            mean_spectral_centroid=float(features.get('mean_spectral_centroid', 0.0)),
+            mean_spectral_flux=float(features.get('mean_spectral_flux', 0.0)),
+            silent=False
         )
 
         time.sleep(1)
@@ -160,6 +163,12 @@ def process_and_play(filepath):
                         'playing',
                         f'Playing... {frame_time:.1f}s / {duration:.1f}s',
                         progress,
+                        tempo=float(features['tempo']),
+                        beats=int(len(features['beat_frames'])),
+                        duration=duration,
+                        mean_spectral_centroid=float(features.get('mean_spectral_centroid', 0.0)),
+                        mean_spectral_flux=float(features.get('mean_spectral_flux', 0.0)),
+                        silent=bool(frame.get('gated', False)),
                         current_time=frame_time,
                         brightness=brightness,
                         warm=warm,
@@ -191,6 +200,7 @@ def process_and_play(filepath):
             'idle',
             'Playback complete!',
             100,
+            silent=False,
             current_time=duration,
             brightness=0,
             warm=0,
