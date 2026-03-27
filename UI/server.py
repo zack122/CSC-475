@@ -144,24 +144,31 @@ def process_and_play(filepath):
             frame_time = float(frame['time'])
 
             if elapsed >= frame_time:
-                brightness = int(frame['brightness'])
-                warm = int(frame['warm'])
-                cool = int(frame['cool'])
-                strobe = bool(frame['strobe'])
-
-                # Send OSC commands
-                qlc.set_channel(1, brightness)
-                qlc.set_channel(2, warm)
-                qlc.set_channel(3, cool)
-                qlc.set_channel(4, 255 if strobe else 0)
+                fixtures = frame["fixtures"]
+                for fixture_num in range(1, 5):
+                    fx = fixtures[f"f{fixture_num}"]
+                    qlc.set_fixture(
+                        fixture_num,
+                        brightness=fx["brightness"],
+                        warm=fx["warm"],
+                        cool=fx["cool"],
+                        strobe=255 if fx["strobe"] else 0,
+    )
 
                 # Only emit UI updates every ~50ms to avoid spamming the browser
                 if elapsed - last_ui_emit >= 0.05 or frame_index == len(lighting_frames) - 1:
                     progress = min(99, 80 + int((frame_time / max(duration, 0.001)) * 20))
 
+                    fixtures = frame["fixtures"]
+
+                    avg_brightness = int(sum(f["brightness"] for f in fixtures.values()) / 4)
+                    avg_warm = int(sum(f["warm"] for f in fixtures.values()) / 4)
+                    avg_cool = int(sum(f["cool"] for f in fixtures.values()) / 4)
+                    any_strobe = any(f["strobe"] for f in fixtures.values())
+
                     update_status(
                         'playing',
-                        f'Playing... {frame_time:.1f}s / {duration:.1f}s',
+                        f'Playing. {frame_time:.1f}s / {duration:.1f}s',
                         progress,
                         tempo=float(features['tempo']),
                         beats=int(len(features['beat_frames'])),
@@ -170,21 +177,18 @@ def process_and_play(filepath):
                         mean_spectral_flux=float(features.get('mean_spectral_flux', 0.0)),
                         silent=bool(frame.get('gated', False)),
                         current_time=frame_time,
-                        brightness=brightness,
-                        warm=warm,
-                        cool=cool,
-                        strobe=strobe
+                        brightness=avg_brightness,
+                        warm=avg_warm,
+                        cool=avg_cool,
+                        strobe=any_strobe,
+                        fixtures=fixtures
                     )
 
                     last_ui_emit = elapsed
 
                 # Debug print every 20 frames
                 if frame_index % 20 == 0:
-                    print(
-                        f"[FRAME {frame_index}] "
-                        f"t={frame_time:.2f}s "
-                        f"brightness={brightness} warm={warm} cool={cool} strobe={strobe}"
-                    )
+                    print(f"[FRAME {frame_index}] t={frame_time:.2f}s fixtures={fixtures}")
 
                 frame_index += 1
             else:
