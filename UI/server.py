@@ -38,8 +38,10 @@ current_status = {
     'duration': None,
     'current_time': 0,
     'brightness': 0,
-    'warm': 0,
-    'cool': 0,
+    'red': 0,
+    'green': 0,
+    'blue': 0,
+    'white': 0,
     'strobe': False
 }
 
@@ -145,15 +147,24 @@ def process_and_play(filepath):
 
             if elapsed >= frame_time:
                 brightness = int(frame['brightness'])
-                warm = int(frame['warm'])
-                cool = int(frame['cool'])
+                red = int(frame['red'])
+                green = int(frame['green'])
+                blue = int(frame['blue'])
+                white = int(frame['white'])
                 strobe = bool(frame['strobe'])
-
+                strobe_value = 255 if strobe else 0
+                
                 # Send OSC commands
-                qlc.set_channel(1, brightness)
-                qlc.set_channel(2, warm)
-                qlc.set_channel(3, cool)
-                qlc.set_channel(4, 255 if strobe else 0)
+                for fixture in range(1, 5):
+                    qlc.set_fixture(
+                        fixture,
+                        brightness=brightness,
+                        red=red,
+                        green=green,
+                        blue=blue,
+                        white=white,
+                        strobe=strobe_value
+                    )
 
                 # Only emit UI updates every ~50ms to avoid spamming the browser
                 if elapsed - last_ui_emit >= 0.05 or frame_index == len(lighting_frames) - 1:
@@ -171,8 +182,10 @@ def process_and_play(filepath):
                         silent=bool(frame.get('gated', False)),
                         current_time=frame_time,
                         brightness=brightness,
-                        warm=warm,
-                        cool=cool,
+                        red=red,
+                        green=green,
+                        blue=blue,
+                        white=white,
                         strobe=strobe
                     )
 
@@ -183,7 +196,8 @@ def process_and_play(filepath):
                     print(
                         f"[FRAME {frame_index}] "
                         f"t={frame_time:.2f}s "
-                        f"brightness={brightness} warm={warm} cool={cool} strobe={strobe}"
+                        f"brightness={brightness} red={red} green={green} "
+                        f"blue={blue} white={white} strobe={strobe}"
                     )
 
                 frame_index += 1
@@ -203,8 +217,10 @@ def process_and_play(filepath):
             silent=False,
             current_time=duration,
             brightness=0,
-            warm=0,
-            cool=0,
+            red=0,
+            green=0,
+            blue=0,
+            white=0,
             strobe=False
         )
 
