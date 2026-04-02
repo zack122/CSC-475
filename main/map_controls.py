@@ -3,27 +3,14 @@ import time
 
 client = SimpleUDPClient("127.0.0.1", 7700)
 
-# Change this variable to map different controls
-MODE = "brightness"
-# options: "brightness", "warm", "cool", "strobe"
+FIXTURE = 1
+MODE = "brightness"  # brightness, red, green, blue, white, strobe
 
-print(f"Mapping mode: {MODE}")
+path = f"/mir/f{FIXTURE}/{MODE}"
+
+print(f"Sending to {path}")
 
 while True:
-    if MODE == "brightness":
-        client.send_message("/mir/brightness", 255)
-        print("sending brightness")
-
-    elif MODE == "warm":
-        client.send_message("/mir/warm", 255)
-        print("sending warm")
-
-    elif MODE == "cool":
-        client.send_message("/mir/cool", 255)
-        print("sending cool")
-
-    elif MODE == "strobe":
-        client.send_message("/mir/strobe", 255)
-        print("sending strobe")
-
-    time.sleep(0.3)
+    client.send_message(path, 255)
+    print(f"sending {path}")
+    time.sleep(0.5)
