@@ -3,8 +3,8 @@ import time
 
 client = SimpleUDPClient("127.0.0.1", 7700)
 
-FIXTURE = 1
-MODE = "brightness"  # brightness, red, green, blue, white, strobe
+FIXTURE = 4
+MODE = "strobe"  # brightness, red, green, blue, white, strobe
 
 path = f"/mir/f{FIXTURE}/{MODE}"
 
