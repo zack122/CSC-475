@@ -28,6 +28,9 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 playback_paused = threading.Event()
 playback_paused.set()  # set = running, clear = paused
 
+stop_requested = threading.Event()  # set = stop the current playback loop
+current_filepath = None  # path of the most recently uploaded file
+
 # Global state
 current_status = {
     'state': 'idle',  # idle, processing, playing, error
@@ -77,6 +80,11 @@ def update_status(state, message, progress=None, **kwargs):
 
 def process_and_play(filepath):
     """Process audio file and send OSC commands to QLC+"""
+    global current_filepath
+    current_filepath = filepath
+    stop_requested.clear()
+    playback_paused.set()  # ensure not stuck in paused state
+
     try:
         # Step 1: Load audio
         update_status('processing', 'Loading audio file...', 10)
@@ -133,6 +141,9 @@ def process_and_play(filepath):
         print(f"[PLAYBACK] Duration: {duration:.2f}s")
 
         while frame_index < len(lighting_frames):
+            if stop_requested.is_set():
+                break
+
             # If paused, block here and track how long we were paused
             if not playback_paused.is_set():
                 pause_start = time.time()
@@ -190,23 +201,36 @@ def process_and_play(filepath):
             else:
                 time.sleep(0.001)
 
-        # Turn lights off after playback ends
-        time.sleep(0.1) 
-        qlc.blackout(4) # Wasn't working when I send it once, but adding a delay and a second send fixed it
+        # Turn lights off after playback ends (or was stopped)
+        time.sleep(0.1)
+        qlc.blackout(4)  # Wasn't working when sent once; delay + second send fixed it
         time.sleep(0.05)
-        qlc.blackout(4) 
+        qlc.blackout(4)
 
-        update_status(
-            'idle',
-            'Playback complete!',
-            100,
-            silent=False,
-            current_time=duration,
-            brightness=0,
-            warm=0,
-            cool=0,
-            strobe=False
-        )
+        if stop_requested.is_set():
+            update_status(
+                'idle',
+                'Playback stopped.',
+                0,
+                silent=False,
+                current_time=0,
+                brightness=0,
+                warm=0,
+                cool=0,
+                strobe=False
+            )
+        else:
+            update_status(
+                'idle',
+                'Playback complete!',
+                100,
+                silent=False,
+                current_time=duration,
+                brightness=0,
+                warm=0,
+                cool=0,
+                strobe=False
+            )
 
         print("[PLAYBACK] Complete")
 
@@ -287,6 +311,52 @@ def handle_toggle_pause():
         playback_paused.set()
         print('[PLAYBACK] Resumed')
         socketio.emit('playback_paused', {'paused': False})
+
+@socketio.on('stop_playback')
+def handle_stop_playback():
+    """Stop current playback and reset state"""
+    stop_requested.set()
+    playback_paused.set()  # unblock any paused thread so it can see the stop flag
+    try:
+        qlc = QLCController(ip="127.0.0.1", port=7700)
+        qlc.blackout(4)
+    except Exception:
+        pass
+    print('[PLAYBACK] Stopped by user')
+    # State reset is handled by process_and_play once the loop exits;
+    # emit immediately so the UI updates right away.
+    socketio.emit('status_update', {
+        **current_status,
+        'state': 'idle',
+        'message': 'Playback stopped.',
+        'progress': 0,
+        'brightness': 0,
+        'warm': 0,
+        'cool': 0,
+        'strobe': False,
+        'current_time': 0,
+    })
+
+@socketio.on('restart_playback')
+def handle_restart_playback():
+    """Restart the current song from the beginning"""
+    global current_filepath
+    if not current_filepath or not os.path.exists(current_filepath):
+        socketio.emit('status_update', {**current_status, 'state': 'error', 'message': 'No song loaded to restart.'})
+        return
+    filepath = current_filepath
+    stop_requested.set()
+    playback_paused.set()
+    print('[PLAYBACK] Restarting...')
+    # Give the running thread a moment to exit before launching a new one
+    def _delayed_restart():
+        time.sleep(0.3)
+        thread = threading.Thread(target=process_and_play, args=(filepath,))
+        thread.daemon = True
+        thread.start()
+    t = threading.Thread(target=_delayed_restart)
+    t.daemon = True
+    t.start()
 
 @socketio.on('disconnect')
 def handle_disconnect():
