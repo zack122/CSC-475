@@ -83,28 +83,49 @@ h1 {
     color: #666;
 }
 
-/* Pause Button */
-#pause-btn {
-    display: none;
-    margin: 15px auto 0;
-    padding: 12px 40px;
-    font-size: 1.1em;
+/* Playback Controls */
+.playback-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.playback-controls button {
+    padding: 10px 28px;
+    font-size: 1em;
     font-weight: bold;
     color: white;
-    background: linear-gradient(135deg, #667eea, #764ba2);
     border: none;
     border-radius: 8px;
     cursor: pointer;
     transition: opacity 0.2s, transform 0.1s;
 }
 
-#pause-btn:hover {
-    opacity: 0.9;
+.playback-controls button:hover {
+    opacity: 0.88;
     transform: scale(1.03);
 }
 
-#pause-btn:active {
+.playback-controls button:active {
     transform: scale(0.97);
+}
+
+#pause-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+#stop-btn {
+    background: linear-gradient(135deg, #e53e3e, #c53030);
+}
+
+#restart-btn {
+    background: linear-gradient(135deg, #3182ce, #2b6cb0);
+}
+
+#new-song-btn {
+    background: linear-gradient(135deg, #38a169, #276749);
 }
 
 /* Upload Panel */

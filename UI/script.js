@@ -11,6 +11,11 @@ const infoPanel = document.getElementById('info-panel');
 const statusPanel = document.getElementById('status-panel');
 
 const pauseBtn = document.getElementById('pause-btn');
+const stopBtn = document.getElementById('stop-btn');
+const restartBtn = document.getElementById('restart-btn');
+const newSongBtn = document.getElementById('new-song-btn');
+
+let hasLoadedSong = false;
 
 // Pause button
 pauseBtn.addEventListener('click', () => {
@@ -25,6 +30,76 @@ socket.on('playback_paused', (data) => {
         if (audioPlayer) audioPlayer.play();
     }
 });
+
+// Stop button — halt playback, reset UI values to zero
+stopBtn.addEventListener('click', () => {
+    socket.emit('stop_playback');
+    if (audioPlayer) {
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+    }
+    resetPlaybackUI();
+});
+
+// Restart button — replay the same song from the beginning
+restartBtn.addEventListener('click', () => {
+    socket.emit('restart_playback');
+    pauseBtn.textContent = 'Pause';
+    if (audioPlayer) {
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+    }
+});
+
+// New Song button — stop playback and clear everything so user can upload a new file
+newSongBtn.addEventListener('click', () => {
+    socket.emit('stop_playback');
+    if (audioPlayer) {
+        audioPlayer.pause();
+        audioPlayer = null;
+    }
+    if (audioBlobUrl) {
+        URL.revokeObjectURL(audioBlobUrl);
+        audioBlobUrl = null;
+    }
+    fileInput.value = '';
+    hasLoadedSong = false;
+    resetPlaybackUI();
+    infoPanel.style.display = 'none';
+    statusMessage.textContent = 'Ready to upload audio file';
+    progressFill.style.width = '0%';
+    progressText.textContent = '0%';
+    statusPanel.className = 'panel';
+    updateControlVisibility('idle');
+});
+
+function resetPlaybackUI() {
+    // Reset DMX channel bars to zero
+    document.getElementById('brightness-bar').style.width = '0%';
+    document.getElementById('brightness-val').textContent = '0';
+    document.getElementById('warm-bar').style.width = '0%';
+    document.getElementById('warm-val').textContent = '0';
+    document.getElementById('cool-bar').style.width = '0%';
+    document.getElementById('cool-val').textContent = '0';
+    document.getElementById('strobe-indicator').classList.remove('active');
+    document.getElementById('strobe-val').textContent = 'OFF';
+    document.getElementById('silence-value').textContent = 'OFF';
+    document.getElementById('time-value').textContent = '0.0';
+}
+
+function updateControlVisibility(state) {
+    const isActive = state === 'processing' || state === 'playing';
+    const isPlaying = state === 'playing';
+
+    pauseBtn.style.display = isPlaying ? 'inline-block' : 'none';
+    stopBtn.style.display = isActive ? 'inline-block' : 'none';
+    restartBtn.style.display = hasLoadedSong ? 'inline-block' : 'none';
+    newSongBtn.style.display = hasLoadedSong ? 'inline-block' : 'none';
+
+    if (!isPlaying) {
+        pauseBtn.textContent = 'Pause';
+    }
+}
 
 // File upload handlers
 dropZone.addEventListener('click', () => fileInput.click());
@@ -105,28 +180,28 @@ socket.on('start_playback', () => {
 
 // WebSocket: Receive status updates
 socket.on('status_update', (status) => {
-    console.log('Status update:', status);
-    
     // Update status message
     statusMessage.textContent = status.message;
-    
+
     // Update progress bar
     progressFill.style.width = status.progress + '%';
     progressText.textContent = status.progress + '%';
-    
+
     // Stop audio when playback ends or errors
     if ((status.state === 'idle' || status.state === 'error') && audioPlayer) {
         audioPlayer.pause();
-        audioPlayer = null;
+        if (status.state === 'idle') {
+            audioPlayer = null;
+        }
     }
 
-    // Show/hide pause button
-    if (status.state === 'playing') {
-        pauseBtn.style.display = 'block';
-    } else {
-        pauseBtn.style.display = 'none';
-        pauseBtn.textContent = 'Pause';
+    // Track whether a song has ever been loaded this session
+    if (status.state === 'processing' || status.state === 'playing') {
+        hasLoadedSong = true;
     }
+
+    // Update button visibility
+    updateControlVisibility(status.state);
 
     // Update status panel color based on state
     statusPanel.className = 'panel status-' + status.state;
