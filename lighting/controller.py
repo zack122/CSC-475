@@ -15,18 +15,36 @@ def normalize_feature(values):
 def map_features_to_lighting(features):
     rms = np.asarray(features["rms"], dtype=float)
     times = np.asarray(features["times"], dtype=float)
+    n = len(times)
 
     rms_norm = normalize_feature(rms)
     centroid_norm = normalize_feature(features["spectral_centroid"])
     onset_norm = normalize_feature(features["onset_strength"])
 
-    # Optional spectral flux if available
-    if "spectral_flux" in features and len(features["spectral_flux"]) == len(times):
+    if "spectral_flux" in features and len(features["spectral_flux"]) == n:
         flux_norm = normalize_feature(features["spectral_flux"])
     else:
         flux_norm = np.zeros_like(rms_norm)
 
+    # PI3: local tempo normalised to [0,1]
+    if "local_tempo" in features:
+        lt = np.asarray(features["local_tempo"], dtype=float)
+        lt = lt[:n] if len(lt) >= n else np.pad(lt, (0, n - len(lt)), mode='edge')
+        local_tempo_norm = normalize_feature(lt)
+    else:
+        local_tempo_norm = np.ones(n)
+
+    # PI4: pulse clarity
+    if "plp" in features:
+        plp = np.asarray(features["plp"], dtype=float)
+        plp = plp[:n] if len(plp) >= n else np.pad(plp, (0, n - len(plp)), mode='edge')
+        plp_norm = normalize_feature(plp)
+    else:
+        plp_norm = np.ones(n)
+
     lighting_frames = []
+    prev_brightness = 0
+    prev_white = 0
 
     # Silence gate
     if len(times) > 1 and len(rms) == len(times):
@@ -65,18 +83,24 @@ def map_features_to_lighting(features):
             white = 0
             strobe = False
         else:
-            brightness = int(rms_norm[i] * 255)
+            clarity = float(plp_norm[i])   # PI4: 0 = unclear beat, 1 = steady beat
+            smooth = 1.0 - float(local_tempo_norm[i])
 
-            # Color strategy:
-            # low centroid -> warmer/redder
-            # high centroid -> bluer
-            # onset/flux -> green/white accents
+            # PI4: scale contrast by pulse clarity
+            raw_brightness = int((0.3 + 0.7 * clarity) * rms_norm[i] * 255)
+            raw_white = int((0.3 + 0.7 * clarity) * ((onset_norm[i] * 0.6) + (rms_norm[i] * 0.4)) * 255)
+            
+            brightness = int(smooth * prev_brightness + (1.0 - smooth) * raw_brightness)
+            white = int(smooth * prev_white + (1.0 - smooth) * raw_white)
+
             red = int((1.0 - centroid_norm[i]) * 255)
             blue = int(centroid_norm[i] * 255)
             green = int(flux_norm[i] * 255)
-            white = int(((onset_norm[i] * 0.6) + (rms_norm[i] * 0.4)) * 255)
 
             strobe = onset_norm[i] > 0.4 and brightness > 80
+
+        prev_brightness = brightness
+        prev_white = white
 
         lighting_frames.append({
             "time": float(times[i]),

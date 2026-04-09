@@ -28,6 +28,12 @@ def extract_features(y, sr, hop_length: int = 512):
 
     tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr, hop_length=hop_length)
 
+    local_tempo = librosa.feature.tempo(
+        onset_envelope=onset_strength, sr=sr, hop_length=hop_length, aggregate=None
+    )
+
+    plp = librosa.beat.plp(onset_envelope=onset_strength, sr=sr, hop_length=hop_length)
+
     # Spectral flux (positive differences of L2-normalized magnitude spectrum)
     n_fft = 2048
     S = np.abs(
@@ -55,4 +61,6 @@ def extract_features(y, sr, hop_length: int = 512):
         "onset_strength": onset_strength,
         "tempo": float(np.atleast_1d(tempo)[0]),
         "beat_frames": beat_frames,
+        "local_tempo": local_tempo,
+        "plp": plp,
     }
