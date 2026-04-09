@@ -18,6 +18,11 @@
                 <div id="progress-fill" class="progress-fill"></div>
             </div>
             <div id="progress-text">0%</div>
+            <div id="latency-display" style="display:none;" class="latency-row">
+                <span class="latency-label">Frame Latency:</span>
+                <span id="latency-current" class="latency-value">0.0</span>ms
+                &nbsp;(avg: <span id="latency-avg">0.0</span>ms &nbsp;max: <span id="latency-max">0.0</span>ms)
+            </div>
             <div class="playback-controls">
                 <button id="pause-btn" style="display:none;">Pause</button>
                 <button id="stop-btn" style="display:none;">Stop</button>
@@ -26,6 +31,16 @@
             </div>
         </div>
         
+        <!-- Controls -->
+        <div id="controls-panel" class="panel">
+            <h2>Controls</h2>
+            <div class="control-row">
+                <label for="aggressiveness-slider">Lighting Aggressiveness: <strong><span id="aggressiveness-display">100%</span></strong></label>
+                <input type="range" id="aggressiveness-slider" min="0" max="200" value="100" step="1" class="aggressiveness-slider">
+                <span class="aggressiveness-hint">0% = lights off &nbsp;|&nbsp; 100% = normal &nbsp;|&nbsp; 200% = maximum</span>
+            </div>
+        </div>
+
         <!-- File Upload -->
         <div id="upload-panel" class="panel">
             <h2>Upload Audio File</h2>

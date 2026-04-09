@@ -83,6 +83,31 @@ h1 {
     color: #666;
 }
 
+/* Latency display */
+.latency-row {
+    margin-top: 10px;
+    font-size: 0.95em;
+    color: #555;
+}
+.latency-label { font-weight: bold; margin-right: 6px; }
+.latency-good { color: #28a745; font-weight: bold; }
+.latency-warn { color: #ffc107; font-weight: bold; }
+.latency-bad  { color: #dc3545; font-weight: bold; }
+
+/* Aggressiveness slider */
+.control-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.control-row label { font-size: 1.1em; color: #333; }
+.aggressiveness-slider {
+    width: 100%;
+    accent-color: #667eea;
+    cursor: pointer;
+}
+.aggressiveness-hint { font-size: 0.85em; color: #999; }
+
 /* Playback Controls */
 .playback-controls {
     display: flex;

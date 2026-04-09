@@ -45,8 +45,14 @@ current_status = {
     'green': 0,
     'blue': 0,
     'white': 0,
-    'strobe': False
+    'strobe': False,
+    'latency_ms': 0.0,
+    'avg_latency_ms': 0.0,
+    'max_latency_ms': 0.0,
 }
+
+aggressiveness = 1.0
+_latency_samples = []
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -86,6 +92,7 @@ def process_and_play(filepath):
     current_filepath = filepath
     stop_requested.clear()
     playback_paused.set()  # ensure not stuck in paused state
+    _latency_samples.clear()
 
     try:
         # Step 1: Load audio
@@ -157,11 +164,18 @@ def process_and_play(filepath):
             frame_time = float(frame['time'])
 
             if elapsed >= frame_time:
-                brightness = int(frame['brightness'])
-                red = int(frame['red'])
-                green = int(frame['green'])
-                blue = int(frame['blue'])
-                white = int(frame['white'])
+                latency_ms = (elapsed - frame_time) * 1000.0
+                _latency_samples.append(latency_ms)
+                if len(_latency_samples) > 100:
+                    _latency_samples.pop(0)
+                avg_latency = sum(_latency_samples) / len(_latency_samples)
+                max_latency = max(_latency_samples)
+
+                brightness = min(255, int(frame['brightness'] * aggressiveness))
+                red = min(255, int(frame['red'] * aggressiveness))
+                green = min(255, int(frame['green'] * aggressiveness))
+                blue = min(255, int(frame['blue'] * aggressiveness))
+                white = min(255, int(frame['white'] * aggressiveness))
                 strobe = bool(frame['strobe'])
                 strobe_value = 255 if strobe else 0
                 
@@ -197,7 +211,10 @@ def process_and_play(filepath):
                         green=green,
                         blue=blue,
                         white=white,
-                        strobe=strobe
+                        strobe=strobe,
+                        latency_ms=round(latency_ms, 2),
+                        avg_latency_ms=round(avg_latency, 2),
+                        max_latency_ms=round(max_latency, 2),
                     )
 
                     last_ui_emit = elapsed
@@ -376,6 +393,11 @@ def handle_restart_playback():
     t = threading.Thread(target=_delayed_restart)
     t.daemon = True
     t.start()
+
+@socketio.on('set_aggressiveness')
+def handle_set_aggressiveness(data):
+    global aggressiveness
+    aggressiveness = max(0.0, min(2.0, float(data.get('value', 1.0))))
 
 @socketio.on('disconnect')
 def handle_disconnect():

@@ -17,6 +17,14 @@ const newSongBtn = document.getElementById('new-song-btn');
 
 let hasLoadedSong = false;
 
+// Aggressiveness slider
+const aggressivenessSlider = document.getElementById('aggressiveness-slider');
+const aggressivenessDisplay = document.getElementById('aggressiveness-display');
+aggressivenessSlider.addEventListener('input', () => {
+    aggressivenessDisplay.textContent = aggressivenessSlider.value + '%';
+    socket.emit('set_aggressiveness', { value: aggressivenessSlider.value / 100 });
+});
+
 // Pause button
 pauseBtn.addEventListener('click', () => {
     socket.emit('toggle_pause');
@@ -31,7 +39,7 @@ socket.on('playback_paused', (data) => {
     }
 });
 
-// Stop button — halt playback, reset UI values to zero
+// Stop button
 stopBtn.addEventListener('click', () => {
     socket.emit('stop_playback');
     if (audioPlayer) {
@@ -41,7 +49,7 @@ stopBtn.addEventListener('click', () => {
     resetPlaybackUI();
 });
 
-// Restart button — replay the same song from the beginning
+// Restart button
 restartBtn.addEventListener('click', () => {
     socket.emit('restart_playback');
     pauseBtn.textContent = 'Pause';
@@ -51,7 +59,7 @@ restartBtn.addEventListener('click', () => {
     }
 });
 
-// New Song button — stop playback and clear everything so user can upload a new file
+// New Song button
 newSongBtn.addEventListener('click', () => {
     socket.emit('stop_playback');
     if (audioPlayer) {
@@ -139,7 +147,7 @@ function uploadFile(file) {
 
     statusMessage.textContent = 'Uploading file...';
 
-    // Prepare audio for playback using the local file (no server round-trip needed)
+    // Prepare audio for playback using the local file
     if (audioBlobUrl) {
         URL.revokeObjectURL(audioBlobUrl);
     }
@@ -233,6 +241,18 @@ socket.on('status_update', (status) => {
         document.getElementById('silence-value').textContent = status.silent ? 'ON' : 'OFF';
     }
     
+    const latencyDiv = document.getElementById('latency-display');
+    if (status.state === 'playing' && status.latency_ms !== undefined) {
+        latencyDiv.style.display = 'block';
+        const curEl = document.getElementById('latency-current');
+        curEl.textContent = status.latency_ms.toFixed(1);
+        curEl.className = status.latency_ms < 20 ? 'latency-good' : status.latency_ms < 50 ? 'latency-warn' : 'latency-bad';
+        document.getElementById('latency-avg').textContent = status.avg_latency_ms.toFixed(1);
+        document.getElementById('latency-max').textContent = status.max_latency_ms.toFixed(1);
+    } else if (status.state === 'idle' || status.state === 'error') {
+        latencyDiv.style.display = 'none';
+    }
+
     // Update lighting visualization
     updateLightingViz(status);
 });
