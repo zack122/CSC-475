@@ -52,7 +52,7 @@ System performance will be evaluated based on latency, feature stability, and su
 * **PI1 (basic):** Set up the project repository and basic environment requirements.
 * **PI2 (basic):** Ensure audio can be streamed into the system via file buffer or live input.
 * **PI3 (expected):** Integrate all MIR scripts from team members into a single, unified control loop.
-* **PI4 (expected):** Create a latency-monitoring tool to ensure lighting stays synced with audio within 20ms.
+* **PI4 (expected):** Create a latency-monitoring tool to ensure lighting stays synced with audio within 20ms. TODO.
 * **PI5 (advanced):** Implement a GUI or dashboard to monitor extracted features and DMX output values in real-time.
 
 ## Leo DeRosa
@@ -60,24 +60,24 @@ System performance will be evaluated based on latency, feature stability, and su
 * **PI1 (basic):** Establish a functional connection between Python and QLC+ via OSC.
 * **PI2 (basic):** Map audio energy (RMS) to a single DMX dimmer channel.
 * **PI3 (expected):** Create a mapping logic where spectral centroid changes the colour palette of the lights.
-* **PI4 (expected):** Implement a "strobe" trigger based on onset strength or percussive peaks.
-* **PI5 (advanced):** Develop scene transition logic that detects structural changes (verse to chorus) to trigger DMX scene swaps.
+* **PI4 (expected):** Implement a "strobe" trigger based on onset strength or percussive peaks. LOOK INTO
+* **PI5 (advanced):** Develop scene transition logic that detects structural changes (verse to chorus) to trigger DMX scene swaps. TODO.
 
 ## Blake Stewart
 ### Objective 1: Rhythmic Feature Extraction
 * **PI1 (basic):** Implement basic tempo (BPM) estimation using Librosa.
 * **PI2 (basic):** Extract rhythmic onsets from various music genres.
-* **PI3 (expected):** Implement real-time beat tracking that adjusts to local tempo drift.
-* **PI4 (expected):** Extract "pulse clarity" to determine how "steady" the light movement should be.
-* **PI5 (advanced):** Implement a multi-band onset detector to separate "kick drum" flashes from "snare" flashes.
+* **PI3 (expected):** Implement real-time beat tracking that adjusts to local tempo drift. TODO.
+* **PI4 (expected):** Extract "pulse clarity" to determine how "steady" the light movement should be. TODO (lights dont move).
+* **PI5 (advanced):** Implement a multi-band onset detector to separate "kick drum" flashes from "snare" flashes. TODO.
 
 ## Tom Yasinchuk
 ### Objective 1: Spectral & Structural Analysis
 * **PI1 (basic):** Calculate Mean Spectral Centroid and Flux for an audio stream.
 * **PI2 (basic):** Implement a "Silence detection" gate to turn off lights when audio stops.
-* **PI3 (expected):** Implement Harmonic/Percussive Source Separation (HPSS) to drive different light groups.
-* **PI4 (expected):** Conduct "User-in-the-loop" testing to calibrate the "aggressiveness" of the lighting behaviour.
-* **PI5 (advanced):** Use Chroma features to map musical keys to specific "mood-based" colour temperatures.
+* **PI3 (expected):** Implement Harmonic/Percussive Source Separation (HPSS) to drive different light groups. TODO.
+* **PI4 (expected):** Conduct "User-in-the-loop" testing to calibrate the "aggressiveness" of the lighting behaviour. TODO (Sort of).
+* **PI5 (advanced):** Use Chroma features to map musical keys to specific "mood-based" colour temperatures. TODO (Kind of complete, but we should tune it better).
 
 ---
 ## 6. Related Work
