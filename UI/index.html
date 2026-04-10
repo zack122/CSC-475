@@ -9,40 +9,138 @@
 <body>
     <div class="container">
         <h1>🎵 Music to DMX Lighting Controller</h1>
-        
-        <!-- Status Display -->
-        <div id="status-panel" class="panel">
-            <h2>Status</h2>
-            <div id="status-message">Ready to upload audio file</div>
-            <div class="progress-bar">
-                <div id="progress-fill" class="progress-fill"></div>
-            </div>
-            <div id="progress-text">0%</div>
-            <div id="latency-display" style="display:none;" class="latency-row">
-                <span class="latency-label">Frame Latency:</span>
-                <span id="latency-current" class="latency-value">0.0</span>ms
-                &nbsp;(avg: <span id="latency-avg">0.0</span>ms &nbsp;max: <span id="latency-max">0.0</span>ms)
-            </div>
-            <div class="playback-controls">
-                <button id="pause-btn" style="display:none;">Pause</button>
-                <button id="stop-btn" style="display:none;">Stop</button>
-                <button id="restart-btn" style="display:none;">Restart</button>
-                <button id="new-song-btn" style="display:none;">New Song</button>
-            </div>
-        </div>
-        
-        <!-- Controls -->
-        <div id="controls-panel" class="panel">
-            <h2>Controls</h2>
-            <div class="control-row">
-                <label for="aggressiveness-slider">Lighting Aggressiveness: <strong><span id="aggressiveness-display">100%</span></strong></label>
-                <input type="range" id="aggressiveness-slider" min="0" max="200" value="100" step="1" class="aggressiveness-slider">
-                <span class="aggressiveness-hint">0% = lights off &nbsp;|&nbsp; 100% = normal &nbsp;|&nbsp; 200% = maximum</span>
-            </div>
-        </div>
 
-        <!-- File Upload -->
-        <div id="upload-panel" class="panel">
+        <div class="main-grid">
+
+            <!-- LEFT COLUMN -->
+            <div class="left-col">
+
+                <!-- Status Panel -->
+                <div id="status-panel" class="panel">
+                    <h2>Status</h2>
+                    <div id="status-message">Ready to upload audio file</div>
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <div id="progress-text">0%</div>
+                    <div id="latency-display" style="display:none;" class="latency-row">
+                        <span class="latency-label">Frame Latency:</span>
+                        <span id="latency-current" class="latency-value">0.0</span>ms
+                        &nbsp;(avg: <span id="latency-avg">0.0</span>ms &nbsp;max: <span id="latency-max">0.0</span>ms)
+                    </div>
+                    <div class="playback-controls">
+                        <button id="pause-btn" style="display:none;">Pause</button>
+                        <button id="stop-btn" style="display:none;">Stop</button>
+                        <button id="restart-btn" style="display:none;">Restart</button>
+                        <button id="new-song-btn" style="display:none;">New Song</button>
+                    </div>
+                </div>
+
+                <!-- Controls Panel -->
+                <div id="controls-panel" class="panel">
+                    <h2>Controls</h2>
+                    <div class="control-row">
+                        <label for="aggressiveness-slider">Lighting Aggressiveness: <strong><span id="aggressiveness-display">100%</span></strong></label>
+                        <input type="range" id="aggressiveness-slider" min="0" max="200" value="100" step="1" class="aggressiveness-slider">
+                        <span class="aggressiveness-hint">0% = off &nbsp;|&nbsp; 100% = normal &nbsp;|&nbsp; 200% = max</span>
+                    </div>
+                </div>
+
+                <!-- Audio Info Panel -->
+                <div id="info-panel" class="panel" style="display:none;">
+                    <h2>Audio Information</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">Tempo:</span>
+                            <span id="tempo-value">--</span> BPM
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Beats:</span>
+                            <span id="beats-value">--</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Duration:</span>
+                            <span id="duration-value">--</span>s
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Current Time:</span>
+                            <span id="time-value">0.0</span>s
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Mean Centroid:</span>
+                            <span id="centroid-value">--</span> Hz
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Mean Flux:</span>
+                            <span id="flux-value">--</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Silence Gate:</span>
+                            <span id="silence-value">OFF</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- end left-col -->
+
+            <!-- RIGHT COLUMN -->
+            <div class="right-col">
+
+                <!-- Lighting Visualization Panel -->
+                <div id="lighting-panel" class="panel">
+                    <h2>DMX Channel Values (Live)</h2>
+                    <div class="lighting-viz">
+                        <div class="channel">
+                            <label>Brightness</label>
+                            <div class="channel-bar-container">
+                                <div class="channel-bar" id="brightness-bar"></div>
+                            </div>
+                            <span id="brightness-val">0</span>
+                        </div>
+                        <div class="channel">
+                            <label>Red</label>
+                            <div class="channel-bar-container">
+                                <div class="channel-bar red-bar" id="warm-bar"></div>
+                            </div>
+                            <span id="warm-val">0</span>
+                        </div>
+                        <div class="channel">
+                            <label>Green</label>
+                            <div class="channel-bar-container">
+                                <div class="channel-bar green-bar" id="cool-bar"></div>
+                            </div>
+                            <span id="cool-val">0</span>
+                        </div>
+                        <div class="channel">
+                            <label>Blue</label>
+                            <div class="channel-bar-container">
+                                <div class="channel-bar blue-bar" id="blue-bar"></div>
+                            </div>
+                            <span id="blue-val">0</span>
+                        </div>
+                        <div class="channel">
+                            <label>White</label>
+                            <div class="channel-bar-container">
+                                <div class="channel-bar white-bar" id="white-bar"></div>
+                            </div>
+                            <span id="white-val">0</span>
+                        </div>
+                        <div class="channel">
+                            <label>Strobe</label>
+                            <div class="channel-bar-container strobe-container">
+                                <div class="strobe-indicator" id="strobe-indicator"></div>
+                            </div>
+                            <span id="strobe-val">OFF</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- end right-col -->
+
+        </div><!-- end main-grid -->
+
+        <!-- UPLOAD at bottom, full width -->
+        <div id="upload-panel" class="panel upload-panel">
             <h2>Upload Audio File</h2>
             <div id="drop-zone" class="drop-zone">
                 <p>Drop audio file here or click to select</p>
@@ -50,78 +148,9 @@
             </div>
             <input type="file" id="file-input" accept="audio/*" style="display:none;">
         </div>
-        
-        <!-- Audio Info -->
-        <div id="info-panel" class="panel" style="display:none;">
-            <h2>Audio Information</h2>
-            <div class="info-grid">
-                <div class="info-item">
-                    <span class="label">Tempo:</span>
-                    <span id="tempo-value">--</span> BPM
-                </div>
-                <div class="info-item">
-                    <span class="label">Beats:</span>
-                    <span id="beats-value">--</span>
-                </div>
-                <div class="info-item">
-                    <span class="label">Duration:</span>
-                    <span id="duration-value">--</span>s
-                </div>
-                <div class="info-item">
-                    <span class="label">Current Time:</span>
-                    <span id="time-value">0.0</span>s
-                </div>
-                <div class="info-item">
-                    <span class="label">Mean Spectral Centroid:</span>
-                    <span id="centroid-value">--</span> Hz
-                </div>
-                <div class="info-item">
-                    <span class="label">Mean Spectral Flux:</span>
-                    <span id="flux-value">--</span>
-                </div>
-                <div class="info-item">
-                    <span class="label">Silence Gate:</span>
-                    <span id="silence-value">OFF</span>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Lighting Visualization -->
-        <div id="lighting-panel" class="panel">
-            <h2>DMX Channel Values (Live)</h2>
-            <div class="lighting-viz">
-                <div class="channel">
-                    <label>Ch1: Brightness</label>
-                    <div class="channel-bar-container">
-                        <div class="channel-bar" id="brightness-bar"></div>
-                    </div>
-                    <span id="brightness-val">0</span>
-                </div>
-                <div class="channel">
-                    <label>Ch2: Warm</label>
-                    <div class="channel-bar-container">
-                        <div class="channel-bar warm" id="warm-bar"></div>
-                    </div>
-                    <span id="warm-val">0</span>
-                </div>
-                <div class="channel">
-                    <label>Ch3: Cool</label>
-                    <div class="channel-bar-container">
-                        <div class="channel-bar cool" id="cool-bar"></div>
-                    </div>
-                    <span id="cool-val">0</span>
-                </div>
-                <div class="channel">
-                    <label>Ch4: Strobe</label>
-                    <div class="channel-bar-container">
-                        <div class="strobe-indicator" id="strobe-indicator"></div>
-                    </div>
-                    <span id="strobe-val">OFF</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    
+
+    </div><!-- end container -->
+
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="script.js"></script>
 </body>
