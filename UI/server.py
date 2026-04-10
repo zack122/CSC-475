@@ -5,6 +5,7 @@ import os
 import sys
 import threading
 import time
+import math
 
 # Add parent directory to path for imports
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -179,7 +180,7 @@ def process_and_play(filepath):
                 strobe = bool(frame['strobe'])
                 strobe_value = 255 if strobe else 0
                 
-                # Send OSC commands
+                # Send OSC commands to wash lights only (fixtures 1-4)
                 for fixture in range(1, 5):
                     qlc.set_fixture(
                         fixture,
@@ -190,6 +191,108 @@ def process_and_play(filepath):
                         white=white,
                         strobe=strobe_value
                     )
+
+                # =========================
+                # Moving heads: fixtures 5 and 6
+                # Much bigger movement + mirror on opposite axis
+                # =========================
+
+                b = brightness / 255.0
+                bl = blue / 255.0
+                w = white / 255.0
+                hit = 1.0 if strobe else 0.0
+
+                # Make motion stay alive even during quieter parts
+                energy = 0.35 + (0.65 * b)
+
+                # Faster phase progression = more obvious movement
+                t = elapsed
+                phase1 = t * (3.5 + 7.0 * energy)
+                phase2 = t * (1.7 + 4.0 * energy)
+                phase3 = t * (6.0 + 10.0 * energy)
+
+                # BIG ranges
+                # If this is too extreme, reduce later
+                pan_min = 15
+                pan_max = 240
+                tilt_min = 25
+                tilt_max = 230
+
+                pan_center = (pan_min + pan_max) / 2.0
+                tilt_center = (tilt_min + tilt_max) / 2.0
+                pan_amp = (pan_max - pan_min) / 2.0
+                tilt_amp = (tilt_max - tilt_min) / 2.0
+
+                # Layered motion so it does not just vibrate in one spot
+                pan_wave = (
+                    0.60 * math.sin(phase1) +
+                    0.25 * math.sin(phase2 + 1.1) +
+                    0.15 * math.sin(phase3 + 2.0)
+                )
+
+                tilt_wave = (
+                    0.55 * math.sin(phase2 + 0.7) +
+                    0.30 * math.sin(phase1 * 0.65 + 2.3) +
+                    0.15 * math.sin(phase3 * 0.45 + 0.2)
+                )
+
+                # Bigger sweeps on energetic moments
+                sweep_boost = 1.0 + 0.25 * hit + 0.20 * w
+
+                pan_val_5 = int(pan_center + pan_amp * sweep_boost * pan_wave)
+                tilt_val_5 = int(tilt_center + tilt_amp * sweep_boost * tilt_wave)
+
+                # Mirror on the OTHER axis:
+                # same pan, opposite tilt
+                pan_val_6 = pan_val_5
+                tilt_val_6 = 255 - tilt_val_5
+
+                # Clamp
+                pan_val_5 = max(0, min(255, pan_val_5))
+                pan_val_6 = max(0, min(255, pan_val_6))
+                tilt_val_5 = max(0, min(255, tilt_val_5))
+                tilt_val_6 = max(0, min(255, tilt_val_6))
+
+                # Faster movement channel
+                # On many fixtures: lower value = faster movement
+                speed_val = int(20 + 50 * (1.0 - energy))
+                if strobe:
+                    speed_val = 5
+                speed_val = max(0, min(255, speed_val))
+
+                # Fixture 5
+                qlc.set_fixture(
+                    5,
+                    brightness=brightness,
+                    red=red,
+                    green=green,
+                    blue=blue,
+                    white=white,
+                    strobe=strobe_value
+                )
+                qlc.set_moving_head(
+                    5,
+                    pan=pan_val_5,
+                    tilt=tilt_val_5,
+                    speed=speed_val
+                )
+
+                # Fixture 6
+                qlc.set_fixture(
+                    6,
+                    brightness=brightness,
+                    red=red,
+                    green=green,
+                    blue=blue,
+                    white=white,
+                    strobe=strobe_value
+                )
+                qlc.set_moving_head(
+                    6,
+                    pan=pan_val_6,
+                    tilt=tilt_val_6,
+                    speed=speed_val
+                )
 
                 # Only emit UI updates every ~50ms to avoid spamming the browser
                 if elapsed - last_ui_emit >= 0.05 or frame_index == len(lighting_frames) - 1:
@@ -234,9 +337,9 @@ def process_and_play(filepath):
 
         # Turn lights off after playback ends (or was stopped)
         time.sleep(0.1)
-        qlc.blackout(4)  # Wasn't working when sent once; delay + second send fixed it
+        qlc.blackout(6)  # Wasn't working when sent once; delay + second send fixed it
         time.sleep(0.05)
-        qlc.blackout(4)
+        qlc.blackout(6)
 
 
         if stop_requested.is_set():
@@ -339,7 +442,7 @@ def handle_toggle_pause():
         # Turn lights off while paused
         try:
             qlc = QLCController(ip="127.0.0.1", port=7700)
-            qlc.blackout(4)
+            qlc.blackout(6)
         except Exception:
             pass
         socketio.emit('playback_paused', {'paused': True})
@@ -355,7 +458,7 @@ def handle_stop_playback():
     playback_paused.set()  # unblock any paused thread so it can see the stop flag
     try:
         qlc = QLCController(ip="127.0.0.1", port=7700)
-        qlc.blackout(4)
+        qlc.blackout(6)
     except Exception:
         pass
     print('[PLAYBACK] Stopped by user')
