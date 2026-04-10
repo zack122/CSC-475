@@ -82,13 +82,16 @@ newSongBtn.addEventListener('click', () => {
 });
 
 function resetPlaybackUI() {
-    // Reset DMX channel bars to zero
     document.getElementById('brightness-bar').style.width = '0%';
     document.getElementById('brightness-val').textContent = '0';
     document.getElementById('warm-bar').style.width = '0%';
     document.getElementById('warm-val').textContent = '0';
     document.getElementById('cool-bar').style.width = '0%';
     document.getElementById('cool-val').textContent = '0';
+    document.getElementById('blue-bar').style.width = '0%';
+    document.getElementById('blue-val').textContent = '0';
+    document.getElementById('white-bar').style.width = '0%';
+    document.getElementById('white-val').textContent = '0';
     document.getElementById('strobe-indicator').classList.remove('active');
     document.getElementById('strobe-val').textContent = 'OFF';
     document.getElementById('silence-value').textContent = 'OFF';
@@ -193,7 +196,17 @@ socket.on('status_update', (status) => {
 
     // Update progress bar
     progressFill.style.width = status.progress + '%';
-    progressText.textContent = status.progress + '%';
+    if (status.state === 'playing' && status.duration) {
+        const curSec = Math.floor(status.current_time ?? 0);
+        const totSec = Math.floor(status.duration);
+        const curM = Math.floor(curSec / 60);
+        const curS = String(curSec % 60).padStart(2, '0');
+        const totM = Math.floor(totSec / 60);
+        const totS = String(totSec % 60).padStart(2, '0');
+        progressText.textContent = `${curM}:${curS} / ${totM}:${totS}`;
+    } else {
+        progressText.textContent = status.progress + '%';
+    }
 
     // Stop audio when playback ends or errors
     if ((status.state === 'idle' || status.state === 'error') && audioPlayer) {
@@ -258,28 +271,20 @@ socket.on('status_update', (status) => {
 });
 
 function updateLightingViz(status) {
-    // Update brightness
-    const brightnessBar = document.getElementById('brightness-bar');
-    const brightnessVal = document.getElementById('brightness-val');
-    const brightnessPercent = (status.brightness / 255) * 100;
-    brightnessBar.style.width = brightnessPercent + '%';
-    brightnessVal.textContent = status.brightness;
-    
-    // Update warm
-    const warmBar = document.getElementById('warm-bar');
-    const warmVal = document.getElementById('warm-val');
-    const warmPercent = (status.warm / 255) * 100;
-    warmBar.style.width = warmPercent + '%';
-    warmVal.textContent = status.warm;
-    
-    // Update cool
-    const coolBar = document.getElementById('cool-bar');
-    const coolVal = document.getElementById('cool-val');
-    const coolPercent = (status.cool / 255) * 100;
-    coolBar.style.width = coolPercent + '%';
-    coolVal.textContent = status.cool;
-    
-    // Update strobe
+    const channels = [
+        { bar: 'brightness-bar', val: 'brightness-val', key: 'brightness' },
+        { bar: 'warm-bar',       val: 'warm-val',       key: 'red'        },
+        { bar: 'cool-bar',       val: 'cool-val',       key: 'green'      },
+        { bar: 'blue-bar',       val: 'blue-val',       key: 'blue'       },
+        { bar: 'white-bar',      val: 'white-val',      key: 'white'      },
+    ];
+
+    channels.forEach(({ bar, val, key }) => {
+        const v = status[key] ?? 0;
+        document.getElementById(bar).style.width = ((v / 255) * 100) + '%';
+        document.getElementById(val).textContent = v;
+    });
+
     const strobeIndicator = document.getElementById('strobe-indicator');
     const strobeVal = document.getElementById('strobe-val');
     if (status.strobe) {

@@ -41,7 +41,13 @@ class QLCController:
             raise ValueError(f"Invalid channel name: {channel_name}")
 
         path = f"/mir/f{fixture}/{channel_name}"
-        self._send(path, value)
+        try:
+            self.client.send_message(path, value)
+        except BlockingIOError:
+            # macOS errno 35 (EAGAIN): non-blocking UDP socket send buffer is
+            # momentarily full. Drop this frame's packet — missing a single
+            # ~23ms lighting frame is imperceptible.
+            pass
 
     def set_fixture(
         self,
