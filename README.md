@@ -50,7 +50,7 @@ System performance will be evaluated based on latency, feature stability, and su
 ## Zachary Zhao
 ### Objective 1: System Integration and Real-Time Pipeline.
 * **PI1 (basic):** Set up the project repository and basic environment requirements.
-* **PI2 (basic):** Ensure audio can be streamed into the system via file buffer or live input.
+* **PI2 (basic):** Ensure audio can be streamed into the system via file buffer.
 * **PI3 (expected):** Integrate all MIR scripts from team members into a single, unified control loop.
 * **PI4 (expected):** Create a latency-monitoring tool to ensure lighting stays synced with audio within 20ms.
 * **PI5 (advanced):** Implement a GUI or dashboard to monitor extracted features and DMX output values in real-time.
@@ -60,24 +60,24 @@ System performance will be evaluated based on latency, feature stability, and su
 * **PI1 (basic):** Establish a functional connection between Python and QLC+ via OSC.
 * **PI2 (basic):** Map audio energy (RMS) to a single DMX dimmer channel.
 * **PI3 (expected):** Create a mapping logic where spectral centroid changes the colour palette of the lights.
-* **PI4 (expected):** Implement a "strobe" trigger based on onset strength or percussive peaks. LOOK INTO
-* **PI5 (advanced):** Develop scene transition logic that detects structural changes (verse to chorus) to trigger DMX scene swaps. TODO.
+* **PI4 (expected):** Implement a "strobe" trigger based on onset strength or percussive peaks.
+* **PI5 (advanced):** Implement a complete six-channel RGBW+White+Strobe DMX fixture profile, independently driving brightness, red, green, blue, white, and strobe channels via distinct MIR features across all configured fixtures simultaneously.
 
 ## Blake Stewart
 ### Objective 1: Rhythmic Feature Extraction
 * **PI1 (basic):** Implement basic tempo (BPM) estimation using Librosa.
 * **PI2 (basic):** Extract rhythmic onsets from various music genres.
-* **PI3 (expected):** Implement real-time beat tracking that adjusts to local tempo drift. TODO.
-* **PI4 (expected):** Extract "pulse clarity" to determine how "steady" the light movement should be. TODO (lights dont move).
-* **PI5 (advanced):** Implement a multi-band onset detector to separate "kick drum" flashes from "snare" flashes. TODO.
+* **PI3 (expected):** Implement per-frame local tempo estimation to dynamically adjust the brightness smoothing factor, making lighting transitions snappier at faster tempos and smoother at slower tempos to compensate for tempo drift.
+* **PI4 (expected):** Extract Predominant Local Pulse (PLP) as a pulse clarity metric to scale the contrast range of the brightness output, producing more dramatic lighting swings during sections with a clear rhythmic pulse and subdued output during free or ambiguous rhythmic sections.
+* **PI5 (advanced):** Implement dual-condition onset thresholding combining onset strength (> 0.4) and a brightness floor (> 80) to selectively trigger strobe effects only on strong percussive transients during high-energy sections, suppressing false triggers during quiet or ambient passages.
 
 ## Tom Yasinchuk
 ### Objective 1: Spectral & Structural Analysis
 * **PI1 (basic):** Calculate Mean Spectral Centroid and Flux for an audio stream.
 * **PI2 (basic):** Implement a "Silence detection" gate to turn off lights when audio stops.
-* **PI3 (expected):** Implement Harmonic/Percussive Source Separation (HPSS) to drive different light groups. TODO.
-* **PI4 (expected):** Conduct "User-in-the-loop" testing to calibrate the "aggressiveness" of the lighting behaviour.
-* **PI5 (advanced):** Use Chroma features to map musical keys to specific "mood-based" colour temperatures. TODO (Kind of complete, but we should tune it better).
+* **PI3 (expected):** Implement positive spectral flux using an L2-normalized STFT difference method to quantify frame-to-frame spectral change, mapping it to a dedicated green DMX channel to visually represent musical dynamism and timbral variation.
+* **PI4 (expected):** Implement a real-time "aggressiveness" control exposed as a UI slider (0–200%) that applies a runtime multiplier to all DMX output channels, allowing operators to calibrate the overall intensity of the lighting response without reprocessing the audio.
+* **PI5 (advanced):** Map spectral centroid to a warm-to-cool colour temperature gradient by inversely driving red and blue DMX channels simultaneously, producing warm (red-dominant) colours during bass-heavy passages and cool (blue-dominant) colours during treble-dominant sections.
 
 ---
 ## 6. Related Work
